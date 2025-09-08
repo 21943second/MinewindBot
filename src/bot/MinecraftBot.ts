@@ -87,6 +87,30 @@ export class MinecraftBot {
 		this.bot.chat(message);
 	}
 
+	async runCommand(command: string, args: string): Promise<boolean> {
+		let failed = false;
+
+		const checkForError = (message) => {
+			return (
+				message === 'Unknown command. Type "/help" for help.' ||
+				message === "Nick is already taken"
+			);
+		};
+
+		this.messageEventHandlers.unshift((message) => {
+			failed = failed || checkForError(message);
+			return false;
+		});
+
+		this.bot.chat(`/${command} ${args}`);
+
+		await setTimeout(() => {
+			this.messageEventHandlers.shift();
+		}, 400);
+
+		return failed;
+	}
+
 	send(message: string): void {
 		message = message.slice(0, 256);
 		logger.debug("Sending minecraft message", { content: message });

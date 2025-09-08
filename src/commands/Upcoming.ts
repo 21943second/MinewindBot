@@ -47,7 +47,24 @@ export class Upcoming implements Command {
 				};
 			}
 		} else {
-			return { content: header };
+			const minutesRegex = /\d+/;
+			const match = header.match(minutesRegex);
+			if (match === null) {
+				return { content: header };
+			}
+			const totalMinutes = Number(match[0]);
+			const hours = Math.floor(totalMinutes / 60);
+			const minutes = totalMinutes - 60 * hours;
+			let out = "";
+			if (hours > 0 && minutes > 0) {
+				out = `${hours} hr and ${minutes} min`;
+			} else if (hours > 0) {
+				out = `${hours} hr`;
+			} else {
+				out = `${minutes} min`;
+			}
+			const formatted = header.replace(`${totalMinutes} min`, out);
+			return { content: formatted };
 		}
 	}
 }

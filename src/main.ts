@@ -6,6 +6,7 @@ import { MinecraftBot } from "./bot/MinecraftBot";
 import { Ban } from "./commands/Ban";
 import { ChatType, Platform } from "./commands/Command";
 import { CommandManagerBuilder } from "./commands/CommandManager";
+import { Discord } from "./commands/Discord";
 import { Help } from "./commands/Help";
 import { Players } from "./commands/Players";
 import { PriceCheck } from "./commands/PriceCheck";
@@ -66,6 +67,7 @@ const DCToMWChatStreamSchema = z
 						message: z.object({
 							message: z.string(),
 							proposed_nickname: z.string().optional(),
+							author: z.string().optional(),
 						}),
 					}),
 				)
@@ -107,6 +109,7 @@ async function main() {
 			Platform.discord,
 			Platform.minecraft,
 		])
+		.addCommand(new Discord(minecraftBot), [Platform.minecraft])
 		.addCommand(new Players(minecraftBot), [Platform.discord])
 		.addCommand(new Ban(discordBot), [Platform.discord])
 		.build();
@@ -367,16 +370,26 @@ async function main() {
 
 		const rawMessage = value.message.message;
 		const proposed_nickname = value.message.proposed_nickname;
-		const cleanedMessage = breakLinks(rawMessage);
+		const author = value.message.author;
+		let cleanedMessage = breakLinks(rawMessage).trim().replaceAll("/", "./");
 		if (typeof proposed_nickname !== "undefined") {
-			minecraftBot.send(`/nick ${proposed_nickname}`);
-		}
-		minecraftBot.send(cleanedMessage);
-		if (typeof proposed_nickname !== "undefined") {
+			minecraftBot.runCommand("nick", proposed_nickname).then((failed) => {
+				if (failed) {
+					discordBot.send(
+						`Unable to change nickname to ${proposed_nickname}...`,
+						EventChannel.debug.channel_id,
+					);
+					if (typeof author !== "undefined") {
+						cleanedMessage = `[DC] ${author}: ${cleanedMessage}`;
+					}
+				}
+			});
+			minecraftBot.send(cleanedMessage);
 			setTimeout(() => {
-				minecraftBot.send("/nick DebugMenu");
-			}, 250);
-			//minecraftBot.send(`/nick DebugMenu`);
+				minecraftBot.runCommand("nick", "DebugMenu");
+			}, 400);
+		} else {
+			minecraftBot.send(cleanedMessage);
 		}
 
 		prevDCToMWId = value.id;
@@ -418,6 +431,7 @@ async function main() {
 				{
 					message: cleanedFmtMessage,
 					proposed_nickname: `DC ${cleanedAuthor}`,
+					author: cleanedAuthor,
 					raw: JSON.stringify({
 						displayName: message.author.displayName,
 						member_nickname: message.member?.nickname || "",
