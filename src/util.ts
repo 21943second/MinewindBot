@@ -96,3 +96,7 @@ export function generateNLengthNumber(n: number): string {
 		.toString()
 		.padStart(n, "0");
 }
+
+export async function sleep(ms: number): Promise<void> {
+	new Promise((resolve) => setTimeout(resolve, ms));
+}

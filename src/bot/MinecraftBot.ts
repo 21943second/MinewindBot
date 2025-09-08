@@ -23,6 +23,7 @@ export class MinecraftBot {
 		this.init();
 	}
 	init() {
+		logger.debug("Minecraft bot initializing");
 		const ip =
 			process.env.NODE_ENV === "production"
 				? process.env.MINECRAFT_IP
@@ -33,6 +34,7 @@ export class MinecraftBot {
 			auth: "microsoft", // for offline mode servers, you can set this to 'offline'
 			version: process.env.MINECRAFT_VERSION, // only set if you need a specific version or snapshot (ie: "1.8.9" or "1.16.5"), otherwise it's set automatically
 		});
+		logger.debug("Minecraft bot created. Now adding handlers");
 
 		this.bot.on("message", (jsonMsg: ChatMessage, position: string) => {
 			try {
@@ -87,10 +89,13 @@ export class MinecraftBot {
 
 	send(message: string): void {
 		message = message.slice(0, 256);
+		logger.debug("Sending minecraft message", { content: message });
 		try {
 			this.bot.chat(message);
 		} catch (error) {
-			logger.error(`Unable to send minecraft chat message`, message);
+			logger.error(`Unable to send minecraft chat message`, {
+				content: message,
+			});
 		}
 	}
 

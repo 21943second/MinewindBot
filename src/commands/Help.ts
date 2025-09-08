@@ -1,21 +1,20 @@
-import Command from "./Command";
+import type Command from "./Command";
+import { type CommandResponse, type CommandType, Platform } from "./Command";
 
 export class Help implements Command {
-	isValid(command: string): boolean {
-		return command === "help";
+	isValid(command: CommandType): boolean {
+		return command.command === "help";
 	}
-	process(
-		command: string,
-		args: string[],
-		source: "minecraft" | "discord",
-	): string | undefined {
-		const essMsg = "-pc (ess name) (tier). Pc *only* works for essences";
-		if (source === "minecraft") {
-			return `I currently support 3 commands: -help, -upcoming, and ${essMsg}`;
-		} else if (source === "discord") {
-			return `I currently support: -help, -players, -upcoming, and ${essMsg}`;
-		} else {
-			throw new Error(`Unindentified source: ${source}`);
+	process(command: CommandType): CommandResponse | undefined {
+		const essMsg = "-pc (ess name) (tier). Pc works for essences and keys";
+		if (command.platform === Platform.minecraft) {
+			return {
+				content: `I currently support 3 commands: -help, -upcoming, and ${essMsg}`,
+			};
+		} else if (command.platform === Platform.discord) {
+			return {
+				content: `I currently support: -help, -players, -upcoming, and ${essMsg}`,
+			};
 		}
 	}
 }

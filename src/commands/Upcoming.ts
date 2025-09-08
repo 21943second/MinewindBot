@@ -1,6 +1,8 @@
-import { MinecraftBot } from "../bot/MinecraftBot";
-import { MostRecentEvent } from "../MostRecentEvent";
-import Command from "./Command";
+import type { MinecraftBot } from "../bot/MinecraftBot";
+import logger from "../Logger";
+import type { MostRecentEvent } from "../MostRecentEvent";
+import type Command from "./Command";
+import type { CommandResponse, CommandType } from "./Command";
 
 export class Upcoming implements Command {
 	bot: MinecraftBot;
@@ -9,24 +11,43 @@ export class Upcoming implements Command {
 		this.bot = bot;
 		this.mostRecentEvent = mostRecentEvent;
 	}
-	isValid(command: string): boolean {
-		return command === "upcoming" || command === "event";
+	isValid(command: CommandType): boolean {
+		return command.command === "upcoming" || command.command === "event";
 	}
-	process(
-		command: string,
-		args: string[],
-		source: "minecraft" | "discord",
-	): string | undefined {
+	process(_: CommandType): CommandResponse | undefined {
 		const header = this.bot.getTabHeader();
 		const mostRecentString = this.mostRecentEvent.get();
 		if (header === "") {
 			if (mostRecentString === null || mostRecentString === "") {
-				return `Unable to determine upcoming event`;
+				return { content: `Unable to determine upcoming event` };
 			} else {
-				return `Most Recent Event was ${this.mostRecentEvent.get()}. Potential repeat after reset.`;
+				const resetTime = "17:30:00";
+
+				const currentDate = new Date();
+
+				const resetDate = new Date(currentDate.getTime());
+				resetDate.setHours(Number(resetTime.split(":")[0]));
+				resetDate.setMinutes(Number(resetTime.split(":")[1]));
+				resetDate.setSeconds(Number(resetTime.split(":")[2]));
+
+				logger.debug("Current Date", currentDate);
+				logger.debug("Reset Date", resetDate);
+
+				const deltaMinutesTotal = Math.floor(
+					(resetDate.valueOf() - currentDate.valueOf()) / 1000 / 60,
+				);
+				const deltaHours = Math.floor(deltaMinutesTotal / 60);
+				const deltaMinutes = deltaMinutesTotal % 60;
+				let deltaString = `${deltaMinutes} min`;
+				if (deltaHours) {
+					deltaString = `${deltaHours}h and ${deltaString}`;
+				}
+				return {
+					content: `Most Recent Event was ${this.mostRecentEvent.get()}. Potential repeat after reset (${deltaString}).`,
+				};
 			}
 		} else {
-			return header;
+			return { content: header };
 		}
 	}
 }

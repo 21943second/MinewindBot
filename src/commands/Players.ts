@@ -1,19 +1,16 @@
-import { MinecraftBot } from "src/bot/MinecraftBot";
-import Command from "./Command";
+import type { MinecraftBot } from "../bot/MinecraftBot";
+import type Command from "./Command";
+import type { CommandResponse, CommandType } from "./Command";
 
 export class Players implements Command {
 	bot: MinecraftBot;
 	constructor(bot: MinecraftBot) {
 		this.bot = bot;
 	}
-	isValid(command: string): boolean {
-		return command === "players";
+	isValid(command: CommandType): boolean {
+		return command.command === "players";
 	}
-	process(
-		command: string,
-		args: string[],
-		source: "minecraft" | "discord",
-	): string | undefined {
-		return this.bot.getPlayerList().join("\n");
+	process(_: CommandType): CommandResponse | undefined {
+		return { content: this.bot.getPlayerList().join("\n") };
 	}
 }

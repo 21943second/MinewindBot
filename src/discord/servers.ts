@@ -75,8 +75,8 @@ export const Users = {
 	owner: {
 		ping_group: "166307609157173248",
 	},
-	betatester: {
-		ping_group: "1406505412500389909",
+	admin: {
+		ping_group: "1406139128906780722",
 	},
 	bypass: {
 		ping_group: "1408088344533143622",

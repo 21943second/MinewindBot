@@ -4,10 +4,11 @@ import { DiscordBot } from "../discord/DiscordBot";
 import { EventChannel, Users } from "../discord/servers";
 import logger from "../Logger";
 import { generateNLengthNumber } from "../util";
+import Command, { CommandResponse, CommandType, Platform } from "./Command";
 
 const COOLDOWN_SEC = 60;
 
-export class Verifier {
+export class Verifier implements Command {
 	minecraftBot: MinecraftBot;
 	discordBot: DiscordBot;
 	// TODO: This will grow to takeup unlimited space. Need to implement
@@ -19,32 +20,24 @@ export class Verifier {
 		this.discordBot = discordBot;
 	}
 
-	isValid(command: string): boolean {
-		return command === "verify" || command === "confirm";
+	isValid(command: CommandType): boolean {
+		return command.command === "verify" || command.command === "confirm";
 	}
 
-	process(
-		command: string,
-		args: string[],
-		source: "minecraft" | "discord",
-		discordMessage: OmitPartialGroupDMChannel<Message<boolean>>,
-	): string | undefined {
-		if (command === "verify") {
-			this.verify(args, discordMessage);
-		} else if (command === "confirm") {
-			this.confirm(args, discordMessage);
-		} else {
-			logger.error(`Unable to process invalid source: "${source}`);
+	process(command: CommandType): CommandResponse | undefined {
+		if (command.platform !== Platform.discord) return;
+		if (command.command === "verify") {
+			this.verify(command);
+		} else if (command.command === "confirm") {
+			this.confirm(command);
 		}
-		return undefined;
+		return;
 	}
 
-	verify(
-		args: string[],
-		discordMessage: OmitPartialGroupDMChannel<Message<boolean>>,
-	) {
+	verify(command: CommandType) {
+		if (command.platform !== Platform.discord) return;
 		const verificationCode = generateNLengthNumber(6);
-		if (args.length < 1) {
+		if (command.args.length < 1) {
 			this.discordBot.send(
 				"Missing IGN. Please use the format -verify <ign>. E.g., '-verify 21943second'",
 				EventChannel.verify.channel_id,
@@ -53,8 +46,8 @@ export class Verifier {
 			return;
 		}
 
-		const proposedIGN = args[0].replace(/[^a-zA-Z0-9_]/g, "");
-		const userId = discordMessage.author.id;
+		const proposedIGN = command.args[0].replace(/[^a-zA-Z0-9_]/g, "");
+		const userId = command.original.author.id;
 		const currentTime = Date.now();
 
 		if (userId in this.pendingVerifications) {
@@ -75,7 +68,7 @@ export class Verifier {
 		}
 
 		this.pendingVerifications[userId] = new PendingVerification(
-			discordMessage,
+			command.original,
 			proposedIGN,
 			verificationCode,
 			currentTime,
@@ -92,15 +85,20 @@ export class Verifier {
 		);
 	}
 
-	confirm(
-		args: string[],
-		discordMessage: OmitPartialGroupDMChannel<Message<boolean>>,
-	) {
+	confirm(command: CommandType) {
+		if (command.platform !== Platform.discord) return;
+
 		logger.debug("Checking for confirmation");
-		const userId = discordMessage.author.id;
-		if (args.length < 1) {
+		const userId = command.original.author.id;
+		if (command.args.length < 1) {
+			this.discordBot.send(
+				"Please use the format -confirm <your code> e.g., -confirm 123456",
+				EventChannel.verify.channel_id,
+				false,
+			);
+			return;
 		}
-		const attemptedVerificationCode = args[0];
+		const attemptedVerificationCode = command.args[0];
 		if (!(userId in this.pendingVerifications)) {
 			this.discordBot.send(
 				"You do not have a pending verification. Run -verify to start.",
@@ -119,7 +117,7 @@ export class Verifier {
 			return;
 		}
 
-		this.confirmUser(discordMessage);
+		this.confirmUser(command.original);
 		return;
 	}
 

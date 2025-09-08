@@ -3,6 +3,8 @@ import process from "node:process";
 import { createClient } from "redis";
 import z from "zod";
 import { MinecraftBot } from "./bot/MinecraftBot";
+import { Ban } from "./commands/Ban";
+import { ChatType, Platform } from "./commands/Command";
 import { CommandManagerBuilder } from "./commands/CommandManager";
 import { Help } from "./commands/Help";
 import { Players } from "./commands/Players";
@@ -63,6 +65,7 @@ const DCToMWChatStreamSchema = z
 						id: z.string(),
 						message: z.object({
 							message: z.string(),
+							proposed_nickname: z.string().optional(),
 						}),
 					}),
 				)
@@ -94,15 +97,18 @@ async function main() {
 	const mostRecentEvent = new MostRecentEvent(client);
 	await mostRecentEvent.init();
 
-	const verifyHandler = new Verifier(minecraftBot, discordBot);
+	const verificationManager = new CommandManagerBuilder()
+		.addCommand(new Verifier(minecraftBot, discordBot), [Platform.discord])
+		.build();
 	const commandManager = new CommandManagerBuilder()
-		.addCommand(new Help(), ["minecraft", "discord"])
-		.addCommand(new PriceCheck(), ["minecraft", "discord"])
+		.addCommand(new Help(), [Platform.discord, Platform.minecraft])
+		.addCommand(new PriceCheck(), [Platform.discord, Platform.minecraft])
 		.addCommand(new Upcoming(minecraftBot, mostRecentEvent), [
-			"discord",
-			"minecraft",
+			Platform.discord,
+			Platform.minecraft,
 		])
-		.addCommand(new Players(minecraftBot), ["discord"])
+		.addCommand(new Players(minecraftBot), [Platform.discord])
+		.addCommand(new Ban(discordBot), [Platform.discord])
 		.build();
 
 	const injest = new Injest();
@@ -116,31 +122,25 @@ async function main() {
 	discordBot.registerMessageHandler((message) => {
 		// Special processing for verification... this is such bad code
 		if (message.channelId === EventChannel.verify.channel_id) {
-			let msg = message.toString();
-			if (!msg.startsWith("-")) return false;
-
-			msg = msg.slice("-".length);
-			const [commandString, ...args] = msg.split(" ");
-			logger.debug("Command and Arguments", {
-				command: commandString,
-				args: args,
+			// We know it wont return anything, so just ignore it
+			verificationManager.process({
+				platform: Platform.discord,
+				original: message,
 			});
-			if (verifyHandler.isValid(commandString)) {
-				verifyHandler.process(commandString, args, "discord", message);
-			}
-			return false;
 		}
-		if (message.channelId !== EventChannel.commands.channel_id) {
-			return false;
-		}
-		const msg = message.toString();
-		const response = commandManager.process(msg, "discord");
-		if (typeof response === "undefined") return false;
+		if (message.channelId === EventChannel.commands.channel_id) {
+			const response = commandManager.process({
+				platform: Platform.discord,
+				original: message,
+			});
+			if (typeof response === "undefined") return false;
 
-		discordBot.send(response, EventChannel.commands.channel_id);
+			discordBot.send(response.content, EventChannel.commands.channel_id);
+		}
 		return false;
 	});
 
+	// Process minecraft commands and add response to redis queue
 	minecraftBot.registerMessageEvent((message: string) => {
 		logger.debug(`Analyzing "${message}`);
 
@@ -149,29 +149,39 @@ async function main() {
 		}
 
 		const chat = new ChatEvent(message);
-		if (chat.getName() === "MarkenAP") return false;
+		const username = chat.getName();
+		//if (username === "MarkenAP") return false;
+		if (username === null) return false;
 
 		const messageBody = message.slice(message.indexOf(": ") + 2);
 
-		const response = commandManager.process(messageBody, "minecraft");
+		const response = commandManager.process({
+			platform: Platform.minecraft,
+			original: {
+				author: username,
+				type: ChatType.chat,
+				content: messageBody,
+			},
+		});
 
 		if (typeof response === "undefined") return false;
 
-		client.xAdd(
-			"dc-to-mw-chat",
-			"*",
-			{
-				message: response,
-				messageType: "command",
+		const redisMessage = {
+			message: response.content,
+			messageType: "command",
+		};
+
+		if (response.sender) {
+			redisMessage["proposed_nickname"] = response.sender;
+		}
+
+		client.xAdd("dc-to-mw-chat", "*", redisMessage, {
+			TRIM: {
+				strategy: "MAXLEN",
+				threshold: 4000,
+				strategyModifier: "~",
 			},
-			{
-				TRIM: {
-					strategy: "MAXLEN",
-					threshold: 4000,
-					strategyModifier: "~",
-				},
-			},
-		);
+		});
 		return false;
 	});
 
@@ -339,6 +349,7 @@ async function main() {
 			setTimeout(pollDCToMWQueue, 1000);
 			return;
 		}
+		logger.debug("Discord to MW Message Polled", rawChatStream);
 		const dcToMWchatStream = DCToMWChatStreamSchema.safeParse(rawChatStream);
 		if (dcToMWchatStream.error) {
 			logger.warn(`Failed to parse chat stream`, dcToMWchatStream.error);
@@ -355,8 +366,18 @@ async function main() {
 		}
 
 		const rawMessage = value.message.message;
+		const proposed_nickname = value.message.proposed_nickname;
 		const cleanedMessage = breakLinks(rawMessage);
+		if (typeof proposed_nickname !== "undefined") {
+			minecraftBot.send(`/nick ${proposed_nickname}`);
+		}
 		minecraftBot.send(cleanedMessage);
+		if (typeof proposed_nickname !== "undefined") {
+			setTimeout(() => {
+				minecraftBot.send("/nick DebugMenu");
+			}, 250);
+			//minecraftBot.send(`/nick DebugMenu`);
+		}
 
 		prevDCToMWId = value.id;
 		client.set("prevDCToMWId", prevDCToMWId);
@@ -365,6 +386,7 @@ async function main() {
 
 	pollDCToMWQueue();
 
+	// Send discord chats into redis queue
 	discordBot.registerMessageHandler((message) => {
 		if (message.channelId !== EventChannel.chat.channel_id) {
 			return false;
@@ -377,11 +399,6 @@ async function main() {
 				.replace(/[^a-zA-Z0-9 _'":;+?\-*,.!@#$%^&()[\\/\]{}<>]*/gi, "");
 		});
 
-		//message.guild?.members.fetch(message.author).then((member) => {
-		//if (member.roles.cache.has(Users.betatester.ping_group)) {
-		//	return false;
-		//}
-
 		const has_bypass_role = message.member?.roles.cache.has(
 			Users.bypass.ping_group,
 		);
@@ -393,16 +410,17 @@ async function main() {
 		) {
 			minecraftBot.send(message.toString().replace(";", "/"));
 		} else {
-			const cleanedFmtMessage = `[DC] ${cleanedAuthor}: ${cleanedMessage}`;
+			const cleanedFmtMessage = `[DC] ${cleanedMessage}`;
 			logger.debug(`Queueing "${cleanedFmtMessage}" to minecraft...`);
 			client.xAdd(
 				"dc-to-mw-chat",
 				"*",
 				{
 					message: cleanedFmtMessage,
+					proposed_nickname: `DC ${cleanedAuthor}`,
 					raw: JSON.stringify({
-						member_nickname: message.author.displayName,
-						displayname: message.member?.nickname || "",
+						displayName: message.author.displayName,
+						member_nickname: message.member?.nickname || "",
 						message: message.toString(),
 					}),
 				},
@@ -432,7 +450,8 @@ async function main() {
 			`> Minewind auto event ping w/ bi-directional chat sync (in beta). Join now ${discord_link}`,
 			`> Never miss another event again with auto event pings. Join now ${discord_link}`,
 			`> Talk on minewind from the comfort of discord! Join now ${discord_link}`,
-			`> Try my (very alpha) auto-price checking. Just do -pc (ess name) (level) e.g., -pc antimage 2`,
+			`> Try my alpha auto-price checking. Just do -pc (ess name) (level) e.g., -pc antimage 2`,
+			`> Price checking supports keys. Try it now -pc jester key`,
 			`> Type -help to learn about what commands I support.`,
 			`> New username verification for Minewind discord. Join and try it now ${discord_link}`,
 		];

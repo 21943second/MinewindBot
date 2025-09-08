@@ -1,4 +1,4 @@
-import { codeBlock, escapeCodeBlock } from "discord.js";
+import { codeBlock, escapeCodeBlock, escapeMarkdown } from "discord.js";
 import { EventChannel } from "./discord/servers";
 import { breakLinks, ping } from "./util";
 
@@ -240,7 +240,7 @@ export class ChatEvent extends BaseMessageEvent {
 		} else if (this.message.includes(": <")) {
 			return codeBlock("diff", `-${this.cleaned()}`);
 		} else if (this.message.startsWith("* ")) {
-			return codeBlock("markdown", `#${this.cleaned()}`);
+			return codeBlock("markdown", `#${escapeMarkdown(this.cleaned())}`);
 		} else {
 			return codeBlock(this.cleaned());
 		}
