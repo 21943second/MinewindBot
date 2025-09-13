@@ -1,6 +1,6 @@
 import type { MinecraftBot } from "../bot/MinecraftBot";
-import logger from "../Logger";
 import type { MostRecentEvent } from "../MostRecentEvent";
+import { calculateTimeDelta, TimeDelta } from "../util";
 import type Command from "./Command";
 import type { CommandResponse, CommandType } from "./Command";
 
@@ -15,36 +15,44 @@ export class Upcoming implements Command {
 		return command.command === "upcoming" || command.command === "event";
 	}
 	process(_: CommandType): CommandResponse | undefined {
+		// get header
+
+		// if (no header)
+		//     guess
+		// (header and castle in header and saturday)
+		//     mention castle and upcoming event
+		// else
+		//     alter time and repeat header
 		const header = this.bot.getTabHeader();
 		const mostRecentString = this.mostRecentEvent.get();
+
+		const currentDate = new Date();
+		const isSaturday = currentDate.getDay() === 6;
+
 		if (header === "") {
 			if (mostRecentString === null || mostRecentString === "") {
 				return { content: `Unable to determine upcoming event` };
 			} else {
-				const resetTime = "17:30:00";
+				let resetTime: string;
 
-				const currentDate = new Date();
-
-				const resetDate = new Date(currentDate.getTime());
-				resetDate.setHours(Number(resetTime.split(":")[0]));
-				resetDate.setMinutes(Number(resetTime.split(":")[1]));
-				resetDate.setSeconds(Number(resetTime.split(":")[2]));
-
-				logger.debug("Current Date", currentDate);
-				logger.debug("Reset Date", resetDate);
-
-				const deltaMinutesTotal = Math.floor(
-					(resetDate.valueOf() - currentDate.valueOf()) / 1000 / 60,
-				);
-				const deltaHours = Math.floor(deltaMinutesTotal / 60);
-				const deltaMinutes = deltaMinutesTotal % 60;
-				let deltaString = `${deltaMinutes} min`;
-				if (deltaHours) {
-					deltaString = `${deltaHours}h and ${deltaString}`;
+				if (isSaturday) {
+					resetTime = "19:00:00";
+				} else {
+					resetTime = "17:30:00";
 				}
-				return {
-					content: `Most Recent Event was ${this.mostRecentEvent.get()}. Potential repeat after reset (${deltaString}).`,
-				};
+
+				const timeDelta = calculateTimeDelta(resetTime);
+				const deltaString = this.generateTimeString(timeDelta);
+
+				if (isSaturday) {
+					return {
+						content: `Most Recent Event was ${this.mostRecentEvent.get()}. Potential repeat during castle (${deltaString}).`,
+					};
+				} else {
+					return {
+						content: `Most Recent Event was ${this.mostRecentEvent.get()}. Potential repeat after reset (${deltaString}).`,
+					};
+				}
 			}
 		} else {
 			const minutesRegex = /\d+/;
@@ -55,16 +63,30 @@ export class Upcoming implements Command {
 			const totalMinutes = Number(match[0]);
 			const hours = Math.floor(totalMinutes / 60);
 			const minutes = totalMinutes - 60 * hours;
-			let out = "";
-			if (hours > 0 && minutes > 0) {
-				out = `${hours} hr and ${minutes} min`;
-			} else if (hours > 0) {
-				out = `${hours} hr`;
-			} else {
-				out = `${minutes} min`;
+			const out = this.generateTimeString({ hours: hours, minutes: minutes });
+			let formatted = header.replace(`${totalMinutes} min`, out);
+
+			const bfw = "Battle for Minewind";
+			if (isSaturday && formatted.includes(bfw)) {
+				formatted = formatted.replace(
+					bfw,
+					`${bfw} and ${this.mostRecentEvent.get()}`,
+				);
 			}
-			const formatted = header.replace(`${totalMinutes} min`, out);
+
 			return { content: formatted };
 		}
+	}
+
+	private generateTimeString(delta: TimeDelta): string {
+		let out = "";
+		if (delta.hours > 0 && delta.minutes > 0) {
+			out = `${delta.hours} hr and ${delta.minutes} min`;
+		} else if (delta.hours > 0) {
+			out = `${delta.hours} hr`;
+		} else {
+			out = `${delta.minutes} min`;
+		}
+		return out;
 	}
 }
