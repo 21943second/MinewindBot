@@ -100,3 +100,27 @@ export function generateNLengthNumber(n: number): string {
 export async function sleep(ms: number): Promise<void> {
 	new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function calculateTimeDeltaMS(time: string): number {
+	const currentDate = new Date();
+	const resetDate = new Date(currentDate.getTime());
+	resetDate.setHours(Number(time.split(":")[0]));
+	resetDate.setMinutes(Number(time.split(":")[1]));
+	resetDate.setSeconds(Number(time.split(":")[2]));
+	return resetDate.valueOf() - currentDate.valueOf();
+}
+
+export function calculateTimeDelta(time: string): TimeDelta {
+	const deltaMinutesTotal = calculateTimeDeltaMS(time) / 1000 / 60;
+	const deltaHours = Math.floor(deltaMinutesTotal / 60);
+	const deltaMinutes = deltaMinutesTotal % 60;
+	return {
+		hours: deltaHours,
+		minutes: deltaMinutes,
+	};
+}
+
+export type TimeDelta = {
+	hours: number;
+	minutes: number;
+};
