@@ -53,7 +53,16 @@ export class EssencePriceChecker {
 				const closest = Object.keys(distances).reduce((a, b) =>
 					distances[a] > distances[b] ? b : a,
 				);
-				return `Unable to price check that item. Maybe try ${closest}`;
+				const closestEssence = this.lookupEssence(closest);
+				if (
+					spellName.length > 4 &&
+					distance(closest, spellName) <= 2 &&
+					typeof closestEssence !== "undefined"
+				) {
+					return closestEssence.generatePriceString(level);
+				} else {
+					return `Unable to price check that item. Maybe try ${closest}`;
+				}
 			} else {
 				return ess.generatePriceString(level);
 			}
