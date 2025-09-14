@@ -69,36 +69,6 @@ export class EssencePriceChecker {
 		}
 	}
 
-	legacyProcessMessage(message: string) {
-		logger.debug(`Processing command ${message}`);
-		message = message.toLowerCase();
-
-		const pcRegex = /^- *pc (.*?) ?([1-5]|i|ii|iii|iv|v)?$/;
-
-		if (pcRegex.test(message)) {
-			const match = message.match(pcRegex);
-			if (match === null) return;
-			const spellName = match[1];
-			const raw_level = match[2] || "1";
-			const rn_to_num = {
-				i: 1,
-				ii: 2,
-				iii: 3,
-				iv: 4,
-				v: 5,
-			};
-			const level =
-				raw_level in rn_to_num ? rn_to_num[raw_level] : Number(raw_level);
-			logger.debug(`"${spellName}": ${level}`);
-			const ess: Essence | undefined = this.lookupEssence(spellName);
-			if (typeof ess === "undefined") {
-				return "Unable to price check that item";
-			} else {
-				return ess.generatePriceString(level);
-			}
-		}
-	}
-
 	lookupEssence(essenceName: string): Essence | undefined {
 		const cleanedName = unspaceAndLowercase(essenceName);
 		if (cleanedName in this.essenceMapMaginalized) {
@@ -154,7 +124,7 @@ export class Essence {
 	generatePriceString(tier: number): string {
 		const idx = tier - 1;
 		if (tier > this.cap || this.prices[idx] === "") {
-			return `PC: ${this.title} is not available in tier ${tier}. Max: ${this.cap}`;
+			return `PC: ${this.title} is not available in tier ${tier}. Max: ${this.cap} which ${this.generatePriceString(this.cap).slice(4 + this.title.length + 3)}`;
 		} else if (this.prices[idx] === "(no ess form)") {
 			return `PC: ${this.title} is not available in ess form at tier ${tier}. Max: ${this.cap}`;
 		} else if (this.prices[idx] === "(can stack to 4)") {
