@@ -369,10 +369,11 @@ async function main() {
 		}
 
 		const rawMessage = value.message.message;
-		const proposed_nickname = value.message.proposed_nickname;
+		let proposed_nickname = value.message.proposed_nickname;
 		const author = value.message.author;
 		let cleanedMessage = breakLinks(rawMessage).trim().replaceAll("/", "./");
 		if (typeof proposed_nickname !== "undefined") {
+			proposed_nickname = proposed_nickname.slice(0, 16);
 			minecraftBot.runCommand("nick", proposed_nickname).then((failed) => {
 				if (failed) {
 					discordBot.send(
