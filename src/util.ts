@@ -111,7 +111,7 @@ export function calculateTimeDeltaMS(time: string): number {
 }
 
 export function calculateTimeDelta(time: string): TimeDelta {
-	const deltaMinutesTotal = calculateTimeDeltaMS(time) / 1000 / 60;
+	const deltaMinutesTotal = Math.floor(calculateTimeDeltaMS(time) / 1000 / 60);
 	const deltaHours = Math.floor(deltaMinutesTotal / 60);
 	const deltaMinutes = deltaMinutesTotal % 60;
 	return {
