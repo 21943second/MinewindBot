@@ -182,7 +182,7 @@ export class CastleEvent extends BaseMessageEvent {
 		/^Battle for Minewind (begins in (1 hour|\d+ minutes?|\d+ seconds?)\.)(\n.*)?$/i,
 		/^Battle for Minewind (has started!?|has begun!?)\.?$/i,
 		/^[a-zA-Z0-9 ]{1,64} \([a-zA-Z0-9]{1,4}\) hold the Minewind City!$/i,
-		/^[a-zA-Z0-9 ]{1,64} \([a-zA-Z0-9]{1,4}\) take the Minewind City from hold the Minewind City from [a-zA-Z0-9 ]{1,64} \([a-zA-Z0-9]{1,4}\)!(.*\n.*)?$/i,
+		/^[a-zA-Z0-9 ]{1,64} \([a-zA-Z0-9]{1,4}\) take the Minewind City from [a-zA-Z0-9 ]{1,64} \([a-zA-Z0-9]{1,4}\)!(.*\n.*)*$/i,
 	];
 
 	generateDiscordMessage(): string {
