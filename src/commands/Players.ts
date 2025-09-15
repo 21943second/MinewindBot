@@ -8,7 +8,7 @@ export class Players implements Command {
 		this.bot = bot;
 	}
 	isValid(command: CommandType): boolean {
-		return command.command === "players";
+		return command.command === "players" || command.command === "online";
 	}
 	process(_: CommandType): CommandResponse | undefined {
 		return { content: this.bot.getPlayerList().join("\n") };
