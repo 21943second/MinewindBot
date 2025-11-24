@@ -16,25 +16,7 @@ import { DiscordBot } from "./discord/DiscordBot";
 import { EventChannel, Users } from "./discord/servers";
 import { Injest } from "./influx/injest";
 import logger from "./Logger";
-import {
-	AbyssalEvent,
-	AttackOnGiantEvent,
-	BaitEvent,
-	BeefEvent,
-	CastleEvent,
-	ChatEvent,
-	DeathEvent,
-	DebugEvent,
-	FoxEvent,
-	FreeForAllEvent,
-	LabyrinthEvent,
-	SharpeningEvent,
-	SnovasionEvent,
-	SystemEvent,
-	TeamDeathMatchEvent,
-	VoteEvent,
-	WelcomeEvent,
-} from "./MessageEvent";
+import { AbyssalEvent, AttackOnGiantEvent, BaitEvent, BeefEvent, CastleEvent, ChatEvent, DeathEvent, DebugEvent, FoxEvent, FreeForAllEvent, LabyrinthEvent, SharpeningEvent, SnovasionEvent, SystemEvent, TeamDeathMatchEvent, VoteEvent, WelcomeEvent } from "./MessageEvent";
 import { MostRecentEvent } from "./MostRecentEvent";
 import { breakLinks, getRandomInt, manualSend, pingUser } from "./util";
 
@@ -90,11 +72,12 @@ async function main() {
 			port: process.env.REDIS_PORT,
 		},
 	})
-		.on("error", (err) => {
-			logger.error("Redis Client Error", err);
-			process.exit(1);
-		})
 		.connect();
+
+	client.on("error", (error) => {
+		logger.error("RedisClient crashed", { error: error });
+		// I report it onto a logging service like Sentry. 
+	});
 
 	const mostRecentEvent = new MostRecentEvent(client);
 	await mostRecentEvent.init();
@@ -511,3 +494,4 @@ process.on("SIGINT", async () => {
 
 logger.info("Bot is about to start");
 main();
+

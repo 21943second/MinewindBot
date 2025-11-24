@@ -37,6 +37,15 @@ export class DiscordBot {
 			logger.info("Discord Bot Ready");
 		});
 
+		this.client.on('guildMemberAdd', member => {
+			const how_to_verify_message = `Welcome, ${pingUser(member.id)}! To access the server, type -verify <minecraft ign> while also being logged in to minewind. You'll receive a pm in game. Then do -confirm <code> here to get verified`
+			this.send(
+				how_to_verify_message,
+				EventChannel.verify.channel_id,
+				false,
+			);
+		});
+
 		this.client.on("messageCreate", (message) => {
 			if (message.author.id === this.client.user?.id) return;
 			logger.info(`Discord Message: "${message}`);

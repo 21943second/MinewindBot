@@ -36,9 +36,9 @@ export class Upcoming implements Command {
 				let resetTime: string;
 
 				if (isSaturday) {
-					resetTime = "19:00:00";
+					resetTime = "20:00:00";
 				} else {
-					resetTime = "17:30:00";
+					resetTime = "18:30:00";
 				}
 
 				const timeDelta = calculateTimeDelta(resetTime);

@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import mineflayer, { type Bot } from "mineflayer";
-import type { ChatMessage } from "prismarine-chat";
+import { ChatMessage } from "prismarine-chat";
+import { cleanMinecraftJson } from "../../src/util";
 import logger from "../Logger";
-import { cleanMinecraftJson } from "../util";
 // const mineflayer = require("mineflayer");
 
 export type ChatEventHandler = (username: string, message: string) => boolean;
@@ -30,7 +30,7 @@ export class MinecraftBot {
 				: "localhost";
 		this.bot = mineflayer.createBot({
 			host: ip, // minecraft server ip
-			username: process.env.MINECRAFT_USERNAME, // username to join as if auth is `offline`, else a unique identifier for this account. Switch if you want to change accounts
+			username: process.env.MINECRAFT_EMAIL, // username to join as if auth is `offline`, else a unique identifier for this account. Switch if you want to change accounts
 			auth: "microsoft", // for offline mode servers, you can set this to 'offline'
 			version: process.env.MINECRAFT_VERSION, // only set if you need a specific version or snapshot (ie: "1.8.9" or "1.16.5"), otherwise it's set automatically
 		});
@@ -84,7 +84,14 @@ export class MinecraftBot {
 	}
 
 	unsafeSend(message: string): void {
-		this.bot.chat(message);
+		try {
+			this.bot.chat(message);
+		} catch (error) {
+			logger.error(`Unable to send (unsafe) minecraft chat message`, {
+				content: message,
+				error: error
+			});
+		}
 	}
 
 	async runCommand(command: string, args: string): Promise<boolean> {
@@ -102,7 +109,16 @@ export class MinecraftBot {
 			return false;
 		});
 
-		this.bot.chat(`/${command} ${args}`);
+		const commandMessage = `/${command} ${args}`;
+
+		try {
+			this.bot.chat(commandMessage);
+		} catch (error) {
+			logger.error(`Unable to send minecraft command message`, {
+				content: commandMessage,
+				error: error
+			});
+		}
 
 		await setTimeout(() => {
 			this.messageEventHandlers.shift();
@@ -119,6 +135,7 @@ export class MinecraftBot {
 		} catch (error) {
 			logger.error(`Unable to send minecraft chat message`, {
 				content: message,
+				error: error
 			});
 		}
 	}
@@ -130,7 +147,6 @@ export class MinecraftBot {
 	}
 
 	getTabHeader(): string {
-		logger.warn("Tablist Info", this.bot.tablist);
 		return this.bot.tablist.header.toString();
 	}
 }

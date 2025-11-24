@@ -27,7 +27,7 @@ export class EssencePriceChecker {
 		this.essenceMap = generateFullMap(essences);
 		this.essenceMapMaginalized = marginalizeMap(this.essenceMap);
 	}
-	process(argList: string[]) {
+	process(argList: string[]): [string, number] | undefined {
 		let args = argList.join(" ").toLowerCase();
 
 		// Remove "essence of" from query
@@ -42,7 +42,7 @@ export class EssencePriceChecker {
 			const raw_level = (match[2] || "1").trim();
 			const romanNumeral = parseRomanNumeral(raw_level);
 			const level = romanNumeral ? romanNumeral : Number(raw_level);
-			logger.debug(`"${spellName}": ${level}`);
+			//logger.debug(`"${spellName}": ${level}`);
 			const ess: Essence | undefined = this.lookupEssence(spellName);
 			if (typeof ess === "undefined") {
 				const distances = {};
@@ -54,17 +54,18 @@ export class EssencePriceChecker {
 					distances[a] > distances[b] ? b : a,
 				);
 				const closestEssence = this.lookupEssence(closest);
+				const ess_distance = distance(closest, spellName);
 				if (
 					spellName.length > 4 &&
-					distance(closest, spellName) <= 2 &&
+					ess_distance <= 2 &&
 					typeof closestEssence !== "undefined"
 				) {
-					return closestEssence.generatePriceString(level);
+					return [closestEssence.generatePriceString(level), ess_distance];
 				} else {
-					return `Unable to price check that item. Maybe try ${closest}`;
+					return [`Unable to price check that item. Maybe try ${closest}. Note: pc ONLY supports essences, keys, and some infs.`, ess_distance];
 				}
 			} else {
-				return ess.generatePriceString(level);
+				return [ess.generatePriceString(level), 0];
 			}
 		}
 	}
@@ -124,7 +125,11 @@ export class Essence {
 	generatePriceString(tier: number): string {
 		const idx = tier - 1;
 		if (tier > this.cap || this.prices[idx] === "") {
-			return `PC: ${this.title} is not available in tier ${tier}. Max: ${this.cap} which ${this.generatePriceString(this.cap).slice(4 + this.title.length + 3)}`;
+			let generatedStringOffset = 4 + this.title.length;
+			if (this.cap !== 1) {
+				generatedStringOffset += 3
+			}
+			return `PC: ${this.title} is not available in tier ${tier}. Max: ${this.cap} which ${this.generatePriceString(this.cap).slice(generatedStringOffset)}`;
 		} else if (this.prices[idx] === "(no ess form)") {
 			return `PC: ${this.title} is not available in ess form at tier ${tier}. Max: ${this.cap}`;
 		} else if (this.prices[idx] === "(can stack to 4)") {

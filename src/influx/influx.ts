@@ -24,6 +24,8 @@ export class InfluxDatabase {
 
 	add(point) {
 		logger.debug("Injesting", point);
-		this._client.write(point, this._database);
+		this._client.write(point, this._database).catch(err => {
+			logger.warn("Failed to add message to influx", err);
+		});
 	}
 }

@@ -24,17 +24,28 @@ export class ItemPriceChecker {
 		this.itemMapMaginalized = marginalizeMap(this.itemMap);
 	}
 
-	process(argList: string[]): string | undefined {
+	process(argList: string[]): [string, number] | undefined {
 		const item_name = argList.join(" ").toLowerCase().trim();
 		const item: Item | undefined = this.lookupItem(item_name);
 		if (typeof item !== "undefined") {
-			return item.generatePriceString();
+			return [item.generatePriceString(), 0];
+		}
+		const [closest, distance] = this.determine_closest(argList);
+		const closestItem = this.lookupItem(closest);
+		if (
+			item_name.length > 4 &&
+			distance <= 2 &&
+			typeof closestItem !== "undefined"
+		) {
+			return [closestItem.generatePriceString(), distance];
+		} else {
+			return [`Unable to price check that item. Maybe try ${closest}. Note: pc ONLY supports essences, keys, and some infs.`, distance];
 		}
 	}
 
 	// TODO: Update to return string *and* distance so someone else can deal
 	// with determining global closest.
-	determine_closest(argList: string[]): string {
+	determine_closest(argList: string[]): [string, number] {
 		const item_name = argList.join(" ").toLowerCase().trim();
 		const distances = {};
 		for (const realname of Object.keys(this.itemMap)) {
@@ -44,7 +55,7 @@ export class ItemPriceChecker {
 		const closest = Object.keys(distances).reduce((a, b) =>
 			distances[a] > distances[b] ? b : a,
 		);
-		return closest;
+		return [closest, distances[closest]];
 	}
 
 	lookupItem(essenceName: string): Item | undefined {

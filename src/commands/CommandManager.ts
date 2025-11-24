@@ -25,7 +25,7 @@ export class CommandManager {
 		for (const [command, mapping] of this.config) {
 			if (!mapping.includes(message.platform)) continue;
 			const userCommand = {
-				command: commandString,
+				command: commandString.toLowerCase(),
 				args: args,
 				...message,
 			};

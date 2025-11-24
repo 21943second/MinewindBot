@@ -6,6 +6,7 @@ declare global {
 			MINECRAFT_IP: string;
 			MINECRAFT_VERSION: string;
 			MINECRAFT_USERNAME: string;
+			MINECRAFT_EMAIL: string;
 
 			REDIS_USERNAME: string;
 			REDIS_PASSWORD: string;

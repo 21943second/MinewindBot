@@ -50,6 +50,16 @@ export class Verifier implements Command {
 		const userId = command.original.author.id;
 		const currentTime = Date.now();
 
+		const CONFIRM_CODE_FMT = /^\d{6}$/;
+		if (CONFIRM_CODE_FMT.test(proposedIGN)) {
+			this.discordBot.send(
+				`You likely intended to do -confirm <code> instead of -verify. If you actually have a 6-digit numeric IGN, please contact a staff.`,
+				EventChannel.verify.channel_id,
+				false,
+			);
+			return;
+		}
+
 		if (userId in this.pendingVerifications) {
 			const pendingVerification: PendingVerification =
 				this.pendingVerifications[userId];
@@ -98,7 +108,13 @@ export class Verifier implements Command {
 			);
 			return;
 		}
-		const attemptedVerificationCode = command.args[0];
+		let attemptedVerificationCode = command.args[0];
+		if (attemptedVerificationCode.startsWith("<")) {
+			attemptedVerificationCode = attemptedVerificationCode.slice(1);
+		}
+		if (attemptedVerificationCode.endsWith(">")) {
+			attemptedVerificationCode = attemptedVerificationCode.slice(0, -1);
+		}
 		if (!(userId in this.pendingVerifications)) {
 			this.discordBot.send(
 				"You do not have a pending verification. Run -verify to start.",

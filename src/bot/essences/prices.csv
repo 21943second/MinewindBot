@@ -1,15 +1,15 @@
-Updated 22.08.2025,,Essence Cap,I,II,III,IV,V,Soul Types,,,A new sheet for event prices has been added at the bottom of the page,,,,,
+Updated 02.10.2025,,Essence Cap,I,II,III,IV,V,Soul Types,,,A new sheet for event prices has been added at the bottom of the page,,,,,
 ,,,,,,,,,,,,,,,,
 Tempest Key Essences,,,,,,,,,,,Contributions and opinions to validate prices come from the general public along observed trades.,,,,,
 ,Curse of Living Flames,3,B,BB,S,,,,,,Please send us feedback on prices that you think should be updated.,,,,,
-,Explosive Webbing,3,B,A,SS,,,,,,This 2 year old essence price chart is now a joint collaberation across multiple clans.,,,,,
+,Explosive Webbing,3,B,BB,S,,,,,,This 2 year old essence price chart is now a joint collaberation across multiple clans.,,,,,
 ,Vampire Strike,,X,,,,,,,,Discord server for trading: https://discord.gg/3DUq5q3ekJ,,,,,
-,Fertile Strike,,B,,,,,,,,,,,,,
+,Fertile Strike,,B,,,,,,,,FawnEel,,,,,
 ,Groundbreak Crit,,BBB,,,,,,,,,,,,,
 ,Fairy Barrier,4,BBB,S,X close to Z,Z,,,,,,,,,,
 ,Web Eater,4,B,A,SS,SSS,,,,,"There are now 399 essences including tiers (32 Tempest, 35 Paradox, 30 Dimensional, Inferno 35, Chaos 267)",,,,,
 ,Gravity Resistance,4,BB,A,X close to Z,Z,,,,,Average chaos key price: 2s,,,,,
-,Blood Walker,4,BBB,AA,SSS,X,,,,,bleep bloop christiebot price check machine sayz:,,,,,
+,Blood Walker,4,BBB,AA,SS,X,,,,,bleep bloop christiebot price check machine sayz:,,,,,
 ,Ghost Block,,(no ess form),Price is based on Shield's soul type/count and if it has mending,,,,,,,Price Tiers,Quality Tiers,,,,
 ,Poseidon Block,,(no ess form),Price is based on Shield's soul type/count and if it has mending,,,,,,,Bidding wars,Z,,,,
 ,Railgun,,S,,,,,Fire 2,,,1-2 Sheggs,X,,,,
@@ -56,7 +56,7 @@ Dimensional Key Essences,,,,,,,,,,,7s-9s,S,,,,
 ,Increased Infinity Blocks Placed,,BBB,,,,,,,,,,,22,,22
 ,Static Field,,CC,,,,,Degg,,,,,,3,,3
 ,Life Swap,,CC,,,,,Degg,,,,,,7,,7
-,Summon Dimension Anomaly,,SS,,,,,Dim 2,,,,,,31,,31
+,Summon Dimension Anomaly,,S,,,,,Dim 2,,,,,,31,,31
 ,Water Eater,,BB,,,,,Free,,,,,,5,,5
 ,Ender Pearl Dispencer,,C,,,,,Dim 1,,,,,,1,10,1.15625
 ,Mass Polymorph,,CCC,,,,,Degg,,,,,,20,,20
@@ -98,7 +98,7 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Life Steal,2,BBB,SSS,,,,,,,7s,AAA,,12,,12
 ,Bloodlust,,BBB,,,,,,,,6s,AA,,7,,7
 ,Mounted Damage,2,C,B,,,,,,,5s,A,,60,,60
-,Lightning Strike,3,B,B,SS,,,,,,4s,BBB,,,10,0.15625
+,Lightning Strike,3,B,B,S,,,,,,4s,BBB,,,10,0.15625
 ,Freezing Strike,,A,,,,,,,,3s,BB,,,10,0.15625
 ,Recover Undead Strike,,C,,,,,,,,2s,B,,4,,4
 ,Recover Shadow Strike,,C,,,,,,,,1s Or Less,CCC,,7,,7
@@ -130,13 +130,13 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Unholy Strength,,C,,,,,,,,,,,,,-2
 ,Chain Shot,,C,,,,,,,,,,,,,-2
 ,Death Absorption,,CC,,,,,,,,,,,,,-2
-,Regeneration,3,AA,SS,X close to Z,,,,,,,,,,,-2
-,Jump,5,CC,BB,BBB,AA,SS,,,,,,,,,-2
-,Speed,5,B,BB,S,X close to Z,Z,,,,,,,,,-2
+,Regeneration,3,AA,SS,X,,,,,,,,,,,-2
+,Jump,5,CC,BB,BBB,AA,X,,,,,,,,,-2
+,Speed,5,(no ess form),BB,S,X,Z,,,,,,,,,-2
 ,Strength,4,B,S,SSS,Z,,,,,,,,,,-2
 ,Damage Resistance,,SS,,,,,,,,,,,,,-2
 ,Haste,2,B,SSS,,,,,,,,,,,,-2
-,Absorption,3,BB,S,X close to Z,,,,,,,,,,,-2
+,Absorption,3,BB,S,X,,,,,,,,,,,-2
 ,Water Breathing,,CC,,,,,,,,,,,,,-2
 ,Night Vision,,C,,,,,,,,,,,,,-2
 ,Blindness Immunity,,AA,,,,,,,,,,,,,-2
@@ -236,7 +236,7 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Curse Skull,,C,,,,,Undead 1,,,,,,,,
 ,Zombie Horse,,C,,,,,,,,,,,,,
 ,Bat Blink,,C,,,,,,,,,,,,,
-,Sneak Fortitication,2,CCC,S,,,,,,,,,,,,
+,Sneak Fortitication,2,CCC,A,,,,,,,,,,,,
 ,Tornado,,C,,,,,,,,,,,,,
 ,Quickstep,,A,,,,,,,,,,,,,
 ,Dragon Spawn,,C,,,,,Dragon 1,,,,,,,,
@@ -260,4 +260,4 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Increased Dark Recharge,1,CC,,,,,,,,,,,,,
 ,Increased Dragon Recharge,1,CC,,,,,,,,,,,,,
 ,Beast Soul,3,,CCC,BB,,,,,,,,,,,
-,Dimension Soul,3,,CCC,CC,,,,,,,,,,,
+,Dimension Soul,3,,CCC,BB,,,,,,,,,,,

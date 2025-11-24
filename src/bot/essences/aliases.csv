@@ -57,7 +57,7 @@ Ender Pearl Dispencer
 Mass Polymorph
 Aquatic Explosion
 Death Claw Critical,dclaw critical,dclaw crit,dclaw,death claw crit
-High Gravity Critical,high gravity crit,hgc
+High Gravity Critical,high gravity crit,hgc,high grav crit
 Magma Critical,magma crit
 Water Shot
 Dark Seed Explosion
@@ -95,7 +95,7 @@ Lightning Strike
 Freezing Strike
 Recover Undead Strike
 Recover Shadow Strike
-Backstab,bs
+Backstab,bs,bstab
 Sage Slayer
 Critical Plus,crit plus
 Elder Branch
@@ -119,7 +119,7 @@ Crouching Web Shot
 Rabbit Shot
 Falken
 Heart Extractor
-Decapication
+Decapication,decap
 Unholy Strength
 Chain Shot
 Death Absorption
@@ -129,7 +129,7 @@ Speed
 Strength,str
 Damage Resistance,dmg res,dmg resistance,damage res
 Haste
-Absorption,absorb,abs
+Absorption,absorb,abs,absorp
 Water Breathing
 Night Vision
 Blindness Immunity,blind immunity,blind immun
