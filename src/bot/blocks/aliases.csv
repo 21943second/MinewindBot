@@ -135,7 +135,7 @@ Gray Stained Glass
 Light Gray Stained Glass
 Black Stained Glass
 Tinted Glass
-Glass Block
+Glass Block,Glass
 Glass Pane
 White Glass Pane
 Red Glass Pane
@@ -168,18 +168,18 @@ Crimson Planks
 Crimson Stem
 Stripped Crimson Hyphae
 Stripped Crimson Stem
-Nether Wart Block
-Block of Quartz,quartz block
-Chiseled Quartz Block
+Nether Wart Block,Nether Wart
+Block of Quartz,quartz block,quartz
+Chiseled Quartz Block,Chiseled Quartz
 Nether Quartz Ore
 Quartz Pillar
-Smooth Quartz Block
+Smooth Quartz Block,Smooth Quartz
 Quartz Bricks
 Nether Bricks
 Cracked Nether Bricks
 Netherrack
 Red Nether Bricks
-Magma Block
+Magma Block,Magma
 Soul Sand
 Soul Soil
 Stripped Warped Hyphae
@@ -188,13 +188,13 @@ Warped Hyphae
 Warped Nylium
 Warped Planks
 Warped Stem
-Warped Wart Block
+Warped Wart Block,Warped Wart
 End Stone
 End Stone Bricks
 Obsidian
 Crying Obsidian
 Respawn Anchor
-Purpur Block
+Purpur Block,Purpur
 Purpur Pillar
 Sand
 FarmLand
@@ -207,36 +207,36 @@ Podzol
 Mycellium
 Dirt Path
 Dirt
-Grass Block
-Block Of Iron,iron block
-Block Of Raw Iron,raw iron block
+Grass Block,grass
+Block Of Iron,iron block,iron
+Block Of Raw Iron,raw iron block,raw iron
 Chain
 Deepslate Iron Ore
 Iron Bars
 Iron Ore
-Block Of Gold,gold block
-Block Of Raw Gold,raw gold block
+Block Of Gold,gold block,gold
+Block Of Raw Gold,raw gold block,raw gold
 Deepslate Gold Ore
 Gold Ore
 Deepslate Diamond Ore
-Diamond Block
+Diamond Block,diamond
 Diamond Ore
 Deepslate Emerald Ore
-Emerald Block
+Emerald Block,emeral
 Emerald Ore
 Netherite
 Amethlyst
-Block of Amethyst,amethyst block
+Block of Amethyst,amethyst block,amethyst
 Budding Amethyst
-Block Of Lapiz Lazuli,lapiz lazuli block,lapiz block,block of lapiz
+Block Of Lapiz Lazuli,lapiz lazuli block,lapiz block,block of lapiz,lapiz,lapiz lazuli
 Deepslate Lapis Lazuli Ore
 Lapiz Lazuli Ore
-Block Of Coal,coal block
+Block Of Coal,coal block,coal
 Coal Ore
 Deepslate Coal Ore
-Block Of Copper,copper block
-Waxed Block Of Copper,waxed copper block
-Block of Raw Copper,raw copper block
+Block Of Copper,copper block,copper
+Waxed Block Of Copper,waxed copper block,waxed copper
+Block of Raw Copper,raw copper block,raw copper
 Cut Copper
 Deepslate Copper Ore
 Oxidized Copper
@@ -252,12 +252,12 @@ Smithing Table
 Composter
 Loom
 Note block
-Slime block
-Honey block
+Slime block,slime
+Honey block,honey
 Beenest
 Bookshelf
 Chizeled Bookshelf
-Sculk block
+Sculk block,sculk
 Lodestone
 Stone
 Smooth Stone
@@ -296,7 +296,7 @@ Packed Mud
 Mud Bricks
 Drip Stone
 Calcite
-Gravel Block
+Gravel Block,gravel
 Tuff
 End Rod
 Glowstone
@@ -317,37 +317,37 @@ Azalea Leaves
 Flowering Azalea Leaves
 Mangrove Leaves
 Cherry Leaves
-Brown Mushroom Block
+Brown Mushroom Block,Brown Mushroom
 Mushroom Stem
-Red Mushroom Block
+Red Mushroom Block,Red Mushroom
 Carved Pumpkin
 Hay Bale
 Melon
 Pumpkin
-Moss Block
-Bone Block
+Moss Block,Moss
+Bone Block,Bone
 Mangrove Roots
 Muddy Mangrove Roots
 Honeycomb 
-Brain Coral Block
-Bubble Coral Block
-Fire Coral Block
-Horn Coral Block
-Tube Coral Block,tube coral
+Brain Coral Block,Brain Coral
+Bubble Coral Block,Bubble Coral
+Fire Coral Block,Fire Coral
+Horn Coral Block,Horn Coral
+Tube Coral Block,Tube Coral
 Blue Ice
 Ice
 Packed Ice
-Snow Block
-Dried Kelp Block
+Snow Block,Snow
+Dried Kelp Block,Dried Kelp
 Sponge
 Dark Prismarine
 Prismarine
 Prismarine Bricks
-Redstone Block
-Observer Block
-Piston Block
-Sticky Piston Block
-Target Block
+Redstone Block,Redstone
+Observer Block,Observer
+Piston Block,Piston
+Sticky Piston Block,Sticky Piston
+Target Block,Target
 Daylight Detector
 Redstone Ore
 Ancient Debris

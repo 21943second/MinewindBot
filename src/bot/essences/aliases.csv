@@ -42,7 +42,7 @@ Ice Coffin Strike,ice coffin
 Soul Break
 Healthy Strike
 Untouchable,untouch
-Reflect On Melee Block
+Reflect On Melee Block,reflect melee on block
 Shadowmeld
 Heightened Senses
 Stability Field,stab field
@@ -91,7 +91,7 @@ Reduce Heal,reduced heal
 Life Steal,ls,lifesteal
 Bloodlust
 Mounted Damage
-Lightning Strike
+Lightning Strike,light strike
 Freezing Strike
 Recover Undead Strike
 Recover Shadow Strike
@@ -142,14 +142,14 @@ Grass Nourishment
 Exp Gain Boost
 Increased Heal Power,inc heal power,incr heal power,inc heal,incr heal,increased heal,heal power
 Increased Potion Duration,inc potion duration,incr potion duration
-Increased Heal & Harm Potion,increased heal and harm potion,increased heal and harm,inc heal & harm,inc heal and harm
+Increased Heal & Harm Potion,increased heal and harm potion,increased heal and harm,inc heal & harm,inc heal and harm,improved heal and harm potions,improved heal and harm
 Fast Potion Recharge,fast pot recharge,fast potion,fast pot
 Increased Dagger Replenish,incr dagger replenish,inc dagger replenish
 Increased Throwing Damage,incr throwing dmg,increased throwing damage,incr throwing damage,inc throwing damage,inc throw damage,inc throwing dmg,inc throw damage,increased throw damage,increased throw dmg
 Increased Maximum Daggers,inc maximum daggers,incr maximum daggers
 Increased Summon Damage,inc summon damage,incr summon damage
 Maximum Bees,max bees,increased max bees
-Bee Aggression
+Bee Aggression,bee aggro
 Nature Free Cast
 Bite Back
 Spongebob

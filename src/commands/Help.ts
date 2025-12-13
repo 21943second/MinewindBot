@@ -6,14 +6,16 @@ export class Help implements Command {
 		return command.command === "help";
 	}
 	process(command: CommandType): CommandResponse | undefined {
-		const essMsg = "-pc (ess name) (tier). Pc works for essences and keys";
+		// TODO: This whole thing should be generated from the list of
+		// register commands tbh.
+		const pcMsg = "-pc (ess name) (tier). Pc works for essences, keys, and some inf blocks";
 		if (command.platform === Platform.minecraft) {
 			return {
-				content: `I currently support 3 commands: -help, -upcoming, and ${essMsg}`,
+				content: `I currently support 4 commands: -help, -upcoming, -explain, and ${pcMsg}`,
 			};
 		} else if (command.platform === Platform.discord) {
 			return {
-				content: `I currently support: -help, -players, -upcoming, and ${essMsg}`,
+				content: `I currently support: -help, -players, -upcoming, -explain, and ${pcMsg}`,
 			};
 		}
 	}

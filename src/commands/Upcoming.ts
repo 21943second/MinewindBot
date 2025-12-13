@@ -15,17 +15,19 @@ export class Upcoming implements Command {
 		return command.command === "upcoming" || command.command === "event";
 	}
 	process(_: CommandType): CommandResponse | undefined {
-		// get header
+		const header = this.bot.getTabHeader();
+		const mostRecentString = this.mostRecentEvent.get();
 
+		return Upcoming.generateUpcomingMessage(header, mostRecentString);
+	}
+
+	public static generateUpcomingMessage(header: string, mostRecentString: string | null) {
 		// if (no header)
 		//     guess
 		// (header and castle in header and saturday)
 		//     mention castle and upcoming event
 		// else
 		//     alter time and repeat header
-		const header = this.bot.getTabHeader();
-		const mostRecentString = this.mostRecentEvent.get();
-
 		const currentDate = new Date();
 		const isSaturday = currentDate.getDay() === 6;
 
@@ -46,11 +48,11 @@ export class Upcoming implements Command {
 
 				if (isSaturday) {
 					return {
-						content: `Most Recent Event was ${this.mostRecentEvent.get()}. Potential repeat during castle (${deltaString}).`,
+						content: `Most Recent Event was ${mostRecentString}. Potential repeat during castle (${deltaString}).`,
 					};
 				} else {
 					return {
-						content: `Most Recent Event was ${this.mostRecentEvent.get()}. Potential repeat after reset (${deltaString}).`,
+						content: `Most Recent Event was ${mostRecentString}. Potential repeat after reset (${deltaString}).`,
 					};
 				}
 			}
@@ -70,7 +72,7 @@ export class Upcoming implements Command {
 			if (isSaturday && formatted.includes(bfw)) {
 				formatted = formatted.replace(
 					bfw,
-					`${bfw} and ${this.mostRecentEvent.get()}`,
+					`${bfw} and ${mostRecentString}`,
 				);
 			}
 
@@ -78,7 +80,7 @@ export class Upcoming implements Command {
 		}
 	}
 
-	private generateTimeString(delta: TimeDelta): string {
+	private static generateTimeString(delta: TimeDelta): string {
 		let out = "";
 		if (delta.hours > 0 && delta.minutes > 0) {
 			out = `${delta.hours} hr and ${delta.minutes} min`;

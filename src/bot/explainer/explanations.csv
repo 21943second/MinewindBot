@@ -1,0 +1,257 @@
+title,type,levels,description
+Absorption On Teleport,👕,1-3,Provides absorption on teleport
+Absorption,👕,1-3,Provides absorption effect over time
+Aegis,✨👕,,Cast onto players or mobs to receive any damage they take
+Anti-Mage,👕,1-3,Reduces most magic damage taken
+Aquatic Explosion,⚔,,Explosions create water source blocks at their impact points
+Arrow Strike,⚔,,Increases melee damage based on how many arrows are stuck in a player
+Baby Horde,✨,,Summons a small group of baby zombies
+Back Claymore,👕,,Creates an explosion when hit from behind
+Backstab Resistance,👕,1-3,Reduces damage taken by Backstab essence
+Backstab,⚔,1-2,Increases melee damage when dealt from behind an opponent 
+Ball Lightning,✨,,Shoots a ball of lightning that deals damage in a small AoE
+Bat Blink,✨,,"Teleports behind you, spawning bats that explode near players"
+Beast Soul,👕,1-3,Obtain an extra Beast soul
+Bee Aggression,⚔👕,1-4,TODO
+Berry Bush,✨⚔,,TODO
+Bind,⚔,,Restricts players from teleporting on hit
+Bite Back,👕,,A chance to spawn a ring of evoker fangs around you upon taking damage
+Black Hole,✨,,"Clears a large sphere, pulling in all entities. Costs 1 degg."
+Blessed Snow,✨,,Creates a forcefield around the caster protecting them from most projectiles
+Blind,⚔,,Inflicts blind effect on hit
+Blindness Immunity,👕,,Provides immunity to blindness
+Blizzard,✨,,Creates a path of snow in a large AoE following the player
+Blood Drain,✨,,Drains health of the caster and players and mobs on cast
+Blood Ground Siphon,✨,,'Blood Drain' and 'Blood Heal' no longer harm the caster on its blood ground.
+Blood Heal,✨,,Heals other players at the expense of the caster’s health
+Blood Soul,👕,1-3,Obtain an extra Blood soul
+Blood Soup,✨,,Creates a soup named with the player it is cast on
+Blood Walker,👕,1-3,Blood blocks heal and grant blood souls
+Bloodlust,⚔,,A flat increase in melee damage with a 5 second cooldown
+Bone Path,✨,,Forms a bone-and-soul-sand path; sneaking on it launches the caster upward.
+Bone Spirit,✨,,Fires homing shulker shots that inflict Levitation on hit.
+Cake On Kill,⚔,,Spawns a cake on kill; eating it restores souls.
+Centipede,✨,,Summons a 'centipede' (chain of silverfish) 
+Chain Shot,⚔,,Arrows that hit opponents will ricochet onto other players or mobs
+Chaos Curse,⚔,,A random debuff effect is given to opponents after damaging them with a spell
+Condensed Lightning,✨,,Creates a lightning storm within a small area
+Cripple,⚔,1-3,Debuffs enemies with slowness and weakness
+Critical Plus,⚔,,Increases damage dealt whilst critting
+Crouching Web Shot,⚔,,Leaves a trail of web after shooting an arrow
+Curse Of Fangs,✨,,Follows opponents on the ground dealing damage
+Curse Skull,✨,,"Shoots a skull that explodes on impact, dealing AoE damage and blinding on hit"
+Curse of Living Flames,⚔👕,1-3,"Cursed enemies take explosion damage from fire, lava, and magma blocks."
+Damage Resistance,👕,,Provides resistance effect
+Dark Seed Explosion,⚔,,Explosions leave soul sand and wither flowers on impact
+Death Absorption,⚔,,Provides absorption after killing mobs and players
+Death Claw Critical,⚔,,"Deals extra damage on crit, and binds enemies for 30 seconds"
+Decapitation,⚔,,Receive enemy skulls on kill
+Decreased Infinity Block Cooldown,👕,,Decreases the cooldown for the block-replacement effect of infinity blocks
+Deep Freeze,✨,,"Sends a slow wave that freezes mobs, players, water, and lava in its path"
+Dimension Soul,👕,1-3,Obtain an extra Dimensional soul
+Dimension Steed,✨,,Summons a horse that will teleport instead of jump
+Dragon Fireball,✨,,Throw a fireball projectile that explodes on impact
+Dragon Leap,👕,,"Double-jump forward, exploding on landing; immune to bind"
+Dragon Soul,👕,1-3,Obtain an extra Dragon soul
+Dragon Spawn,✨,,Spawns a blaze to fight for you
+Dragon Switch,✨,,Switches your position with your summoned Dragon Spawn
+Elder Branch,⚔,,Hits summon sword clones that carry the player’s effects; only works at night
+Elder Phantom,✨,,Summons a large Phantom to fight for you
+Ender Pearl Dispenser,✨,,Shoots ender pearls that teleport the caster on impact
+Entangling Roots,✨,,"Traps opponents in tree roots, binding for 30 seconds"
+Escape Skeleton,✨,,"Teleport towards the direction of cast, leaving a skeleton replica of the caster"
+Exp Gain Boost,👕⚔,1-5,Increases experienced received
+Exploding Chickens,✨,,Summons chickens that explode shortly after being nearby enemies
+Explosion Resistance,👕,1-2,Increases resistance to explosive attacks
+Explosive Webbing,⚔,1-3,Explosions leave cobwebs on impact
+Fairy Barrier,👕,1-4,Negates a single hit of damage with a cooldown
+Falken,⚔,,Increases the amount of projectiles cast.
+Fang Strike,⚔,,Melee hits trigger an extra Invoker attack (3s cooldown)
+Fast Blood Recharge,👕⚔,,Increases the rate at which blood souls rejuvenate
+Fast Potion Recharge,👕⚔,,Increases the rate at which potions rejuvenate
+Fatal Strike,⚔,,"Full swings instantly kill players below 30 HP"
+Fatigue Resistance,👕,1-4,Provides resistance to the fatigue
+Feed Blocker,⚔,1-3,Restricts opponents from eating food
+Fertile Strike,⚔,,"Upon hitting mobs and players, a small surrounding area turns into moss and flowers"
+Fire Blast,✨,,Long range shot that explodes after a short interval
+Fire Hand,✨,,Shoots continuous small fireballs that burn on impact
+Fire Soul,👕,1-3,Obtain an extra fire soul
+Fire Soulmass,✨,,Shoots a homing fire shot that explodes on impact
+Fire Spiral,✨,,Shoot a slow moving fire shot that explodes on impact
+Flame Aegis,✨,,Provides temporary nullification to explosion damage
+Flower Field,✨,,Spawns a field of flowers with a massive AoE
+Flower Healing,👕,1-3,"Walking over flowers consumes them, and heals you"
+Flying Brown Panda,✨,,Summons a flying brown panda mount
+Flying Panda,✨,,Summons a flying panda mount
+Flying Turtle,✨,,Summons a flying turtle mount
+Force Field,✨,,Pushes players and mobs away from the area of cast
+Freezing Strike,⚔,,Inflicts freezing to enemies on melee hits
+Frost Armor,👕,1-4,Inflicts freezing to enemies upon taking damage
+Frost Arrow,⚔,,"Increases damage dealt by arrows, and applies freezing effect on hit"
+Ghast Chan,✨,,Summons a ghast that shoots fireballs at enemies
+Ghost Block,⚔,,Teleport behind opponents after blocking hits with a shield
+Giant Snowball,✨,,"Shoots a snowball that, on impact, creates a mound of snow and ice"
+Goatfather,✨,,Summons a goat that leaves blood blocks and polymorphs players on hit
+Grass Nourishment,👕,,Provides saturation when standing on grass
+Gravity Resistance,👕,1-4,Provides resistance to gravity effects
+Gravity Well,✨,,"Lowers an area, increasing gravity and restricting players’ movement"
+Groundbreak Crit,⚔,,"Critical hits cause a 5-block radius explosion, breaking 2 blocks of ground below"
+Grug Charge,👕,,"Leap forward, with a small explosion on impact"
+Haste,👕,1-2,Receive the haste effect (increases mining and swinging speed)
+Headshot Resistance,👕,1-3,Provides resistance to the 'headshot' essence
+Headshot,⚔,1-3,Increases damage dealt by projectiles aimed at the head
+Heal On Shield Block,⚔,,Provides a small heal when blocking hits with a shield
+Heal On Teleport,👕,1-3,Provides a heal upon teleport
+Healthy Strike,⚔,,Deals extra damage to opponents the more health the player has
+Heart Extractor,⚔,,Receive the named heart of players on kill
+Heightened Senses,👕,1-4,Reveals invisible players
+High Gravity Critical,⚔,,"On crit, restricts movement of players and mobs"
+Honey Cannon,✨,,Shoots a beam of honey that replaces blocks with honey on impact
+Ice Bomb,✨,,"When shot at ice, detonates after a short interval"
+Ice Coffin Strike,⚔,,"On crit, trap opponents in an ice box"
+Ice Domain,✨,,"Creates a small ice sphere around the player, applying bind to all players and mobs inside"
+Ice Growth,✨,,Projectile freezes a small area on impact and forms an ice path back to the caster
+Ice Path,✨,,Creates a path of ice under the player. Can be used as a platform to run mid-air
+Ice Pedestal,👕⚔,,"On teleport, create an ice pedestal with a 3 block spherical radius"
+Ice Prison,✨,,"Shoot a projectile that traps opponents on hit, binding them for a short duration"
+Ice Shinto,✨,,"A homing shot that deals AoE damage, binds and traps the enemy on impact"
+Ice Soul,👕,1-3,Obtain an extra Ice soul
+Icengard,✨,,Raises a fast ice platform with a 'blessed snow' forcefield on top
+Ignoble Steed,✨,,Summons a horse with armour
+Increased Arrow Damage,👕⚔,1-5,Increases the damage dealt by bows and crossbows
+Increased Dagger Replenish,👕⚔,,Increases the rate at which daggers are rejuvenated 
+Increased Dark Recharge,👕⚔,,"Increases the rate at which undead, shadow and blood souls are rejuvenated"
+Increased Dragon Recharge,👕⚔,,Increases the rate at which Dragon souls are rejuvenated
+Increased Elemental Recharge,👕⚔,,"Increases the rate at which Ice, Nature and Fire souls are rejuvenated"
+Increased Fire Recharge,👕⚔,,"Increases the rate at which Fire souls are rejuvenated"
+Increased Heal & Harm Potion,👕⚔,,"Increases the healing from health potions, and the damage of harm potions"
+Increased Heal Power,👕⚔,1-5,Increases healing from most sources
+Increased Infinity Blocks Placed,👕,,Increases the AoE of the block-replacement effect of infinity blocks
+Increased Lightning Damage,👕⚔,1-5,Increases the damage dealt by natural lightning
+Increased Magic Damage,👕⚔,1-3,Increases the damage dealt by most spells 
+Increased Maximum Daggers,👕⚔,1-5,Increases the maximum number of daggers held
+Increased Melee Damage,⚔,1-3,Increases melee damage dealt to a player or mob
+Increased Potion Duration,👕⚔,,Increases the duration of positive effect splash potions
+Increased Summon Damage,⚔👕,1-3,Increases the damage dealt by summons
+Increased Throwing Damage,⚔,,Increases the damage dealt by thrown daggers
+Instant Mining,⚔,,Instantly mines blocks
+Invisible Sneak,👕,,Provides invisibility when sneaking
+Jump Rod,✨,,Propels the caster forward
+Jump,👕⚔,1-5,"Provides jump effect, increasing jump height"
+Knockback Immunity,👕,,Provides immunity to knockback
+Lava Bolt,✨,,Shoot a fire shot that explodes on impact and turns the surrounding area into lava
+Lava Eater,👕,,Clears the surrounding area of lava on cast
+Lava Shot,⚔,1-2,"Upon shooting an arrow, the impact leaves a source of lava"
+Lava Shotgun,✨,,Shoots a spray of small fireballs with a large AoE
+Lava Walker,👕,,"Transforms lava under the player’s feet into obsidian, allowing for easy travel on lava"
+Levitation Shot,⚔,,Inflicts the levitation effect on players and mobs upon being hit with a projectile
+Levitation,✨,,"On cast, slowly levitate upwards, being able to move whilst hovering"
+Life Steal,⚔,1-2,Provides a small heal when hitting opponents
+Life Swap,✨,,Swaps the health you currently have with players on cast
+Lightning Strike,⚔,1-3,Occasionally strike opponents with lightning on hit
+Living Wings,👕,,"Gain forward momentum while gliding, activate with shift, 3s cooldown"
+Love Strike,⚔,,Projectile leaves heart particles and grants Regeneration II to players and mobs it hits
+Magic Disrupt,⚔,1-3,Blocks players and bosses from using most spells for a short period of time
+Magma Critical,⚔,,Hits create magma blocks under foes; critical hits trigger explosions
+Magma Orb,✨,,"Fires a slow homing shot that explodes on impact, creating a large magma mound"
+Mana Spirit,✨,,"Spawns an allay, providing a chance not to consume souls"
+Marker,⚔,,Enemies hit will glow for a period of time
+Mass Levitation,✨,,All players and mobs within a small area will levitate for 8s on cast
+Mass Polymorph,✨,,Turns all in a large AoE into random mobs with blood ground beneath
+Maximum Bees,👕,1-4,Increases the amount of bees summoned by War Bees
+Meteor Storm,✨,,"Summons a hail of fireballs from the sky, 1 degg cast"
+Molotov,⚔,,Increases projectile velocity and ignites on impact within a small AoE
+Morbin Time,✨,,Morph into a bat
+Mounted Damage,⚔,1-2,Increases damage whilst mounted
+Multiflame,✨,,Shoot continuous flames that burn enemies on impact
+Nature Free Cast,👕⚔,1-5,Chance to save nature souls when casting nature spells
+Nature Heal,✨,,Large heal on cast
+Nature Soul,👕,1-3,Obtain an extra nature soul
+Nausea Immunity,👕,,Provides immunity to the nausea effect
+Nausea,⚔,,Inflicts nausea effect to players hit
+Night Goggles,👕,,"Grants night vision, toggleable by sneaking"
+Night Vision,👕,,Provides night vision effect
+Ninja Foxes,✨,,Summons 2 foxes to fight for you
+Orc Soul,👕,1-3,Obtain an extra Orc soul
+Parrot Form,✨,,Morph into a parrot
+Photosynthesis,👕,,Provides saturation during sunlight
+Poison Resistance,👕,1-4,Provides resistance to the poison effect
+Poison,⚔,1-3,Inflicts poison effect to enemies on hit
+Polymorph,✨,,Homing projectile that transforms players into random mobs briefly or until hit.
+Poseidon Block,⚔,,Morphs opponents that hit your blocked shield into a fish
+Proximity Blind,⚔👕,,Inflicts AoE blindness on nearby players.
+Puchita,✨,,"Summon a fox that will fight, and trigger lifesteal for you"
+Quickstep,👕,,"Thrust forward whilst mid-air on sneak, unaffected by bind"
+Rabbid Rabbits,⚔,,Summon a swarm of rabbits that inflict poison on hit
+Rabbit Shot,⚔,,Projectiles spawn a rabbit that inflicts poison on hit
+Rage of Zeus,✨,,"Fires a destructive AoE lightning shot, damaging all in its path"
+Railgun,✨,,"Long range, Large AoE explosion with a medium cooldown"
+Rain Healing,👕,,Provides fast regeneration when it rains
+Recover Shadow Strike,⚔,,Recover Shadow souls on hits
+Recover Undead Strike,⚔,,Recover Undead souls on Hits
+Reduce Heal,⚔,,Opponents hit will heal half as quickly
+Reflect On Melee Block,⚔,,Reflects melee damage when blocking with a shield
+Regeneration,👕,1-3,Provides the regeneration effect
+Repeating Arrow,⚔,,Rapidly repeats bow or crossbow shots for a short time
+Sacred Absorption,👕,,Grants Absorption II on soul sand or bone blocks
+Sacred Regen,👕,,Grants Regeneration II on soul sand or bone blocks
+Sacred Strength,👕,,Grants Strength II on soul sand or bone blocks
+Safe Teleport,✨,,Teleport towards the direction of cast without phasing through blocks
+Sage Slayer,⚔,,Boosts damage against players based on their soul count
+Santa Rage,⚔,,Replace arrows with snowballs that detonate on impact
+Satan Sweep,⚔,,"On hit, melee attacks effect a small AoE"
+Shadow Fangs,✨,,Long range straight-line invoker attack 
+Shadow Form,✨,,"On cast, become invisible for a short period of time (or till hit)"
+Shadow Saw,✨,,A stationary offensive spell dealing damage over time in a 1x1 area
+Shadow Soul,👕,1-3,Obtain an extra Shadow soul
+Shadow Swarm,✨,,"Summons spiders that inflict poison, nausea, slowness, and fatigue on hit"
+Shadowmeld,👕,,Provides invisibility during nighttime
+Shoot Web,✨,,Ranged shot that places a cobweb on impact
+Skeleton Archer,✨,,Summons a highly mobile skeleton 
+Skeleton Assassin,✨,,Summons a sword wielding skeleton that binds on hit
+Skeleton Horse,✨,,Summons a skeleton horse mount
+Skeleton On Teleport,👕,,Summons a skeleton upon teleport
+Slayer Of The Blind,⚔,,Deals extra damage to blinded opponents
+Slow Resistance,👕,1-5,Provides resistance to the slowness effect
+Slow,⚔,1-5,Inflicts the slowness effect on hits
+Sneak Fortification,👕,1-2,Provides absorption over time whilst sneaking
+Snowmage,✨,,"Summons a snowman that can fly, casting ice spells at opponents"
+Sonic Slash,⚔,,A long range melee attack with a short cooldown
+Soul Break,⚔,,Melee hits steal souls from opponents
+Soul Chain,✨,,Pulls players and mobs towards you on cast
+Spectre Shot,⚔,,Replaces projectiles with charged creepers
+Speed,👕,1-5,Provides the speed effect
+Spongebob,👕,,Clears any water within 3 blocks of the player
+Spontaneous combustion,✨,,Creates an explosion on cast
+Stability Field,👕,1-3,"Shields the area from explosions, but players still take damage."
+Starve,⚔,,"On hit, opponents will lose hunger"
+Static Field,✨,,Creates a field blocking most spells. Costs 1 degg.
+Sticky Explosive,⚔,,Arrows will detonate after a short period on impact
+Strength,👕,1-4,Provides the strength effect
+Summon Dimension Anomaly,✨,,"Redirects teleport spells in the area to the anomaly, dealing damage."
+Summon Woods,✨,,"Turns a large area into a forest, replacing ground with grass and spawning trees."
+Swap Gate,✨,,"Teleport you, and the blocks underneath you, in the direction of cast"
+Telekinesis,⚔,,Provides the ability to place blocks from a larger distance
+Teleport Behind,⚔,,Teleport behind mobs and players
+Teleport,✨,,Teleport towards the direction of cast
+Tornado,✨,,Summons a large wind current that sucks in players and mobs
+Undead Soul,👕,1-3,Obtain an extra undead soul
+Unholy Strength,⚔,1-3,Increases strength upon killing a player
+Untouchable,👕,1-4,"When hit, inflicts opponents with the fatigue effect"
+Vampire Strike,⚔,,"Steals health on hit, healing you. Nearby blocks turn into “blood blocks” for blood spells"
+Vanishing Teleport,👕⚔,,Provides invisibility upon teleporting
+Vexers,✨,,Summons vexes to fight for you
+Volcanic Explosion,⚔,,Leaves magma blocks around explosions
+War Bees,✨,,Summons a swarm of bees that inflict poison on hit
+Water Ball,✨,,Shoot a ball that leaves a mound of water where it lands
+Water Breathing,👕,,Provides infinite respiration
+Water Eater,👕,,Clears water surrounding the player
+Water Shot,⚔,,"After shooting a projectile, leave a source of water on impact"
+Weakness Resistance,👕,1-4,"Provides resistance to weakness"
+Web Eater,👕,1-4,Consume cobweb blocks for healing
+Web Spinner,✨,,Summons a spider that leaves a trail of web to fight for you
+Web Step,👕,,"On shift, teleport forward leaving a trail of cobweb"
+Wither Resistance,👕,1-4,Provides resistance to wither
+Wither,⚔,1-3,Inflicts opponents with wither on hit
+Woofers,👕,,Summons 2 wolves to fight for you
+Zombie Horse,✨,,Summons a zombie horse mount

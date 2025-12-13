@@ -2,11 +2,14 @@ import dotenv from "dotenv";
 import process from "node:process";
 import { createClient } from "redis";
 import z from "zod";
+import { Advertisement } from "./Advertisement";
 import { MinecraftBot } from "./bot/MinecraftBot";
+import { Advertise } from "./commands/Advertise";
 import { Ban } from "./commands/Ban";
 import { ChatType, Platform } from "./commands/Command";
 import { CommandManagerBuilder } from "./commands/CommandManager";
 import { Discord } from "./commands/Discord";
+import { Explain } from "./commands/Explain";
 import { Help } from "./commands/Help";
 import { Players } from "./commands/Players";
 import { PriceCheck } from "./commands/PriceCheck";
@@ -59,10 +62,8 @@ const DCToMWChatStreamSchema = z
 	.length(1);
 
 async function main() {
-	// TODO: Add auto reconnection logic with exponential backoff
 	const minecraftBot = new MinecraftBot();
 	const discordBot = new DiscordBot();
-	//const essencePriceChecker = new EssencePriceChecker();
 
 	const client = await createClient({
 		username: process.env.REDIS_USERNAME,
@@ -76,11 +77,12 @@ async function main() {
 
 	client.on("error", (error) => {
 		logger.error("RedisClient crashed", { error: error });
-		// I report it onto a logging service like Sentry. 
 	});
 
 	const mostRecentEvent = new MostRecentEvent(client);
 	await mostRecentEvent.init();
+	const advertisement = new Advertisement(client);
+	await advertisement.init();
 
 	const verificationManager = new CommandManagerBuilder()
 		.addCommand(new Verifier(minecraftBot, discordBot), [Platform.discord])
@@ -88,6 +90,7 @@ async function main() {
 	const commandManager = new CommandManagerBuilder()
 		.addCommand(new Help(), [Platform.discord, Platform.minecraft])
 		.addCommand(new PriceCheck(), [Platform.discord, Platform.minecraft])
+		.addCommand(new Explain(), [Platform.discord, Platform.minecraft])
 		.addCommand(new Upcoming(minecraftBot, mostRecentEvent), [
 			Platform.discord,
 			Platform.minecraft,
@@ -95,6 +98,7 @@ async function main() {
 		.addCommand(new Discord(minecraftBot), [Platform.minecraft])
 		.addCommand(new Players(minecraftBot), [Platform.discord])
 		.addCommand(new Ban(discordBot), [Platform.discord])
+		.addCommand(new Advertise(discordBot, advertisement), [Platform.discord])
 		.build();
 
 	const injest = new Injest();
@@ -193,6 +197,15 @@ async function main() {
 		return false;
 	});
 
+
+	function sendCurrentEventMessage() {
+		setTimeout(() => {
+			minecraftBot.send(
+				Upcoming.generateUpcomingMessage(minecraftBot.getTabHeader(), mostRecentEvent.get()).content,
+			)
+		}, 1000)
+	}
+
 	let prevId = (await client.get("prevId")) || "0-0";
 
 	async function pollQueue() {
@@ -215,9 +228,53 @@ async function main() {
 			return;
 		}
 
+		const eventMapping = [{
+			title: "Snovasion",
+			channel: EventChannel.snovasion,
+			init: SnovasionEvent,
+		}, {
+			title: "Beef",
+			channel: EventChannel.beef,
+			init: BeefEvent,
+		}, {
+			title: "Labyrinth",
+			channel: EventChannel.labyrinth,
+			init: LabyrinthEvent,
+		}, {
+			title: "Abyssal",
+			channel: EventChannel.abyssal,
+			init: AbyssalEvent
+		}, {
+			title: "Attack on Giant",
+			channel: EventChannel.attackongiant,
+			init: AttackOnGiantEvent
+		}, {
+			title: "Fox",
+			channel: EventChannel.fox,
+			init: FoxEvent
+		}, {
+			title: "Bait",
+			channel: EventChannel.bait,
+			init: BaitEvent
+		}, {
+			title: "Free-for-all",
+			channel: EventChannel.freeforall,
+			init: FreeForAllEvent
+		}, {
+			title: "Team Deathmatch",
+			channel: EventChannel.teamdeathmatch,
+			init: TeamDeathMatchEvent
+		}, {
+			title: undefined,
+			channel: EventChannel.castle,
+			init: CastleEvent
+		}]
+
+
 		chatStream.data[0].messages
 			.map((message) => message.message.message)
 			.forEach((message) => {
+				const matchedEvents = eventMapping.filter(event => event.init.isValid(message));
 				//console.log(`Discord side looking at "${message}"`);
 				if (VoteEvent.isValid(message)) {
 					discordBot.queue(
@@ -234,65 +291,21 @@ async function main() {
 						new SharpeningEvent(message).generateDiscordMessage(),
 						EventChannel.sharpening.channel_id,
 					);
-				} else if (SnovasionEvent.isValid(message)) {
-					mostRecentEvent.set("Snovasion");
-					discordBot.queue(
-						new SnovasionEvent(message).generateDiscordMessage(),
-						EventChannel.snovasion.channel_id,
-					);
-				} else if (LabyrinthEvent.isValid(message)) {
-					mostRecentEvent.set("Labyrinth");
-					discordBot.queue(
-						new LabyrinthEvent(message).generateDiscordMessage(),
-						EventChannel.labyrinth.channel_id,
-					);
-				} else if (BeefEvent.isValid(message)) {
-					mostRecentEvent.set("Beef");
-					discordBot.queue(
-						new BeefEvent(message).generateDiscordMessage(),
-						EventChannel.beef.channel_id,
-					);
-				} else if (AbyssalEvent.isValid(message)) {
-					mostRecentEvent.set("Abyssal");
-					discordBot.queue(
-						new AbyssalEvent(message).generateDiscordMessage(),
-						EventChannel.abyssal.channel_id,
-					);
-				} else if (AttackOnGiantEvent.isValid(message)) {
-					mostRecentEvent.set("Attack on Giant");
-					discordBot.queue(
-						new AttackOnGiantEvent(message).generateDiscordMessage(),
-						EventChannel.attackongiant.channel_id,
-					);
-				} else if (FoxEvent.isValid(message)) {
-					mostRecentEvent.set("Fox");
-					discordBot.queue(
-						new FoxEvent(message).generateDiscordMessage(),
-						EventChannel.fox.channel_id,
-					);
-				} else if (BaitEvent.isValid(message)) {
-					mostRecentEvent.set("Bait");
-					discordBot.queue(
-						new BaitEvent(message).generateDiscordMessage(),
-						EventChannel.bait.channel_id,
-					);
-				} else if (FreeForAllEvent.isValid(message)) {
-					mostRecentEvent.set("Free-for-all");
-					discordBot.queue(
-						new FreeForAllEvent(message).generateDiscordMessage(),
-						EventChannel.freeforall.channel_id,
-					);
-				} else if (TeamDeathMatchEvent.isValid(message)) {
-					mostRecentEvent.set("Team Deathmatch");
-					discordBot.queue(
-						new TeamDeathMatchEvent(message).generateDiscordMessage(),
-						EventChannel.teamdeathmatch.channel_id,
-					);
-				} else if (CastleEvent.isValid(message)) {
-					discordBot.queue(
-						new CastleEvent(message).generateDiscordMessage(),
-						EventChannel.castle.channel_id,
-					);
+				} else if (matchedEvents.length >= 1) {
+					const eventMap = matchedEvents[0];
+					if (eventMap.title !== undefined) {
+						mostRecentEvent.set(eventMap.title);
+					}
+					const event = new eventMap.init(message)
+					if (event.shouldGenerateDiscordMessage()) {
+						discordBot.queue(
+							event.generateDiscordMessage(),
+							eventMap.channel.channel_id,
+						);
+					}
+					if (event.isEndMessage()) {
+						sendCurrentEventMessage();
+					}
 				} else if (SystemEvent.isValid(message)) {
 					logger.debug(`System event ${message}. Skipping...`);
 					return;
@@ -438,34 +451,46 @@ async function main() {
 		return true;
 	});
 
-	const minTimeoutMS = 600000;
-	const maxTimeoutMS = 1200000;
+	const minTimeoutMSSystem = 10 * 60 * 1000;
+	const maxTimeoutMSSystem = 20 * 60 * 1000;
+	const timeoutMSUser = 5 * 60 * 1000;
 
-	function advertise() {
-		const discord_link = "https://discord.gg/TbmCrPmEBH";
-		const advertisements = [
-			`> Minewind auto event ping w/ bi-directional chat sync (in beta). ${discord_link} Try it out for yourself, send a msg in #chat and see it appear in mw!`,
-			`> Minewind auto event ping w/ bi-directional chat sync (in beta). Join now ${discord_link}`,
-			`> Never miss another event again with auto event pings. Join now ${discord_link}`,
-			`> Talk on minewind from the comfort of discord! Join now ${discord_link}`,
-			`> Try my alpha auto-price checking. Just do -pc (ess name) (level) e.g., -pc antimage 2`,
-			`> Price checking supports keys. Try it now -pc jester key`,
-			`> Type -help to learn about what commands I support.`,
-			`> New username verification for Minewind discord. Join and try it now ${discord_link}`,
-		];
-		const randomIdx = Math.floor(Math.random() * advertisements.length);
-		const randomAdvertisement = advertisements[randomIdx];
-		logger.debug(`Sending advertise: ${randomAdvertisement}`);
-		minecraftBot.unsafeSend(randomAdvertisement);
-		setTimeout(advertise, getRandomInt(minTimeoutMS, maxTimeoutMS));
+	function advertise(advertisement: Advertisement) {
+		const user_advertisement = advertisement.get();
+		if (user_advertisement !== undefined) {
+			logger.debug(`Sending advertise: ${user_advertisement}`);
+			minecraftBot.unsafeSend(user_advertisement);
+			//setTimeout(() => advertise(advertisement), getRandomInt(minTimeoutMSUser, maxTimeoutMSUser));
+			setTimeout(() => advertise(advertisement), timeoutMSUser);
+		} else {
+			const discord_link = "https://discord.gg/TbmCrPmEBH";
+			const advertisements = [
+				`> Minewind auto event ping w/ bi-directional chat sync (in beta). ${discord_link} Try it out for yourself, send a msg in #chat and see it appear in mw!`,
+				`> Minewind auto event ping w/ bi-directional chat sync (in beta). Join now ${discord_link}`,
+				`> Never miss another event again with auto event pings. Join now ${discord_link}`,
+				//`> Talk on minewind from the comfort of discord! Join now ${discord_link}`,
+				//`> Try my auto-price checking. Just do -pc (ess name) (level) e.g., -pc antimage 2`,
+				//`> Price checking supports keys. Try it now -pc jester key`,
+				//`> Price checking supports some inf blocks! Try it now -pc inf diamond block`,
+				`> Type -help to learn about what commands I support.`,
+				`> Essences now have explanations. Do -explain (ess name) to learn more!`,
+			];
+			const randomIdx = Math.floor(Math.random() * advertisements.length);
+			const chosen_advertisement = advertisements[randomIdx];
+			logger.debug(`Sending advertise: ${chosen_advertisement}`);
+			minecraftBot.unsafeSend(chosen_advertisement);
+			setTimeout(() => advertise(advertisement), getRandomInt(minTimeoutMSSystem, maxTimeoutMSSystem));
+		}
 	}
 
-	setTimeout(advertise, getRandomInt(1000000, 2000000));
+	setTimeout(() => advertise(advertisement), getRandomInt(minTimeoutMSSystem, maxTimeoutMSSystem));
 
 	logger.info("Bot is started");
 	manualSend(`Bot is started`, EventChannel.logging.channel_id);
 	manualSend(`Bot has started`, EventChannel.chat.channel_id);
 }
+
+
 
 process.on("uncaughtException", async (error) => {
 	logger.error("Crashed due to uncaught exception", {

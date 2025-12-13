@@ -59,11 +59,34 @@ export class SharpeningEvent extends BaseMessageEvent {
 	}
 }
 
-export class SnovasionEvent extends BaseMessageEvent {
+export abstract class EventMessageEvent extends BaseMessageEvent {
+	static allowed_times = [
+		"1 hour",
+		"30 minutes",
+		"5 minutes",
+	]
+	public abstract shouldGenerateDiscordMessage(): boolean
+	protected _shouldGenerateDiscordMessage(regexes: RegExp[], message: string): boolean {
+		if (!regexes[0].test(message)) {
+			return true;
+		}
+		if (EventMessageEvent.allowed_times.includes(message.match(regexes[0])?.at(1) || "")) {
+			return true;
+		}
+		return false;
+	}
+	abstract isEndMessage(): boolean
+}
+
+export class SnovasionEvent extends EventMessageEvent {
 	static regexes = [
-		/^(Snovasion Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.|Snowmen invade \/pvp!)/,
+		/^Snovasion Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\./,
+		/^Snowmen invade \/pvp!/,
 		/^Snowmen melt away!$/,
 	];
+	shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(SnovasionEvent.regexes, this.message);
+	}
 	generateDiscordMessage(): string {
 		if (SnovasionEvent.regexes[0].test(this.message)) {
 			return `${this.message} ${ping(EventChannel.snovasion.ping_group)} ${ping(EventChannel.general.ping_group)}`;
@@ -71,32 +94,48 @@ export class SnovasionEvent extends BaseMessageEvent {
 			return `${this.message}`;
 		}
 	}
+	isEndMessage(): boolean {
+		return SnovasionEvent.regexes.at(-1)?.test(this.message) || false;
+	}
 }
 
-export class LabyrinthEvent extends BaseMessageEvent {
+export class LabyrinthEvent extends EventMessageEvent {
 	static regexes = [
-		/^Labyrinth event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
-		/^Labyrinth event (is starting\.\.\.|has started!)$/i,
+		/^Labyrinth Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
+		/^Labyrinth event is starting\.\.\.$/i,
+		/^Labyrinth event has started!$/i,
 		/^Labyrinth event has ended!$/i,
 	];
 
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(LabyrinthEvent.regexes, this.message) && !LabyrinthEvent.regexes[1].test(this.message)
+	}
+
 	generateDiscordMessage(): string {
 		if (
-			LabyrinthEvent.regexes[0].test(this.message) ||
-			LabyrinthEvent.regexes[1].test(this.message)
+			LabyrinthEvent.regexes[0].test(this.message)
 		) {
 			return `${this.message} ${ping(EventChannel.labyrinth.ping_group)} ${ping(EventChannel.general.ping_group)}`;
 		} else {
 			return `${this.message}`;
 		}
 	}
+
+	isEndMessage(): boolean {
+		return LabyrinthEvent.regexes.at(-1)?.test(this.message) || false;
+	}
 }
 
-export class BeefEvent extends BaseMessageEvent {
+export class BeefEvent extends EventMessageEvent {
 	static regexes = [
-		/^Beef (Event (begins in (1 hour|\d+ minutes?|\d+ seconds?))\.|has started!)$/i,
+		/^Beef Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
+		/^Beef has started!$/i,
 		/^Team (aqua|red) wins the beef event!$/i,
 	];
+
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(BeefEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (BeefEvent.regexes[0].test(this.message)) {
@@ -105,13 +144,22 @@ export class BeefEvent extends BaseMessageEvent {
 			return `${this.message}`;
 		}
 	}
+
+	isEndMessage(): boolean {
+		return BeefEvent.regexes.at(-1)?.test(this.message) || false;
+	}
 }
 
-export class AbyssalEvent extends BaseMessageEvent {
+export class AbyssalEvent extends EventMessageEvent {
 	static regexes = [
-		/^Abyssal event (begins in (1 hour|\d+ minutes?|\d+ seconds?)\.|has started!)$/,
+		/^Abyssal event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/,
+		/^Abyssal event has started!$/,
 		/^[a-zA-Z0-9_]{2,16} wins the abyssal event! Poseidon is pleased!$/i,
 	];
+
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(AbyssalEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (AbyssalEvent.regexes[0].test(this.message)) {
@@ -120,13 +168,22 @@ export class AbyssalEvent extends BaseMessageEvent {
 			return `${this.message} - 1s, 2 abyssal keys, 1 fmb, 64 gaps, 64 gold coins`;
 		}
 	}
+
+	isEndMessage(): boolean {
+		return AbyssalEvent.regexes.at(-1)?.test(this.message) || false;
+	}
 }
 
-export class AttackOnGiantEvent extends BaseMessageEvent {
+export class AttackOnGiantEvent extends EventMessageEvent {
 	static regexes = [
-		/^Attack on Giant Event (begins in (1 hour|\d+ minutes?|\d+ seconds?)\.|has begun!)$/i,
+		/^Attack on Giant Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
+		/^Attack on Giant Event has begun!$/i,
 		/^Attack on Giant Event ends!$/i,
 	];
+
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(AttackOnGiantEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (AttackOnGiantEvent.regexes[0].test(this.message)) {
@@ -135,38 +192,56 @@ export class AttackOnGiantEvent extends BaseMessageEvent {
 			return `${this.message}`;
 		}
 	}
+
+	isEndMessage(): boolean {
+		return AttackOnGiantEvent.regexes.at(-1)?.test(this.message) || false;
+	}
 }
 
-export class FoxEvent extends BaseMessageEvent {
+export class FoxEvent extends EventMessageEvent {
 	static regexes = [
-		/^Fox Hunt (Event )?(begins in (1 hour|\d+ minutes?|\d+ seconds?)\.|has begun!)$/i,
+		/^Fox Hunt Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
+		/^Fox Hunt has begun!$/i,
 		/^1\) [a-zA-Z0-9_]{2,16} -- \d+ foxes$/i,
 		/^2\) [a-zA-Z0-9_]{2,16} -- \d+ foxes$/i,
 		/^3\) [a-zA-Z0-9_]{2,16} -- \d+ foxes$/i,
 		/^Fox Hunt event ends!$/i,
 	];
 
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(FoxEvent.regexes, this.message)
+	}
+
 	generateDiscordMessage(): string {
 		if (FoxEvent.regexes[0].test(this.message)) {
 			return `${this.message} ${ping(EventChannel.fox.ping_group)} ${ping(EventChannel.general.ping_group)}`;
-		} else if (FoxEvent.regexes[1].test(this.message)) {
-			return `${this.message} - 52 deggs, 1 forbidden cacao beans`;
 		} else if (FoxEvent.regexes[2].test(this.message)) {
-			return `${this.message} - 42 deggs`;
+			return `${this.message} - 52 deggs, 1 forbidden cacao beans`;
 		} else if (FoxEvent.regexes[3].test(this.message)) {
+			return `${this.message} - 42 deggs`;
+		} else if (FoxEvent.regexes[4].test(this.message)) {
 			return `${this.message} - 32 deggs`;
 		} else {
 			return `${this.message}`;
 		}
 	}
+
+	isEndMessage(): boolean {
+		return FoxEvent.regexes.at(-1)?.test(this.message) || false;
+	}
 }
 
-export class BaitEvent extends BaseMessageEvent {
+export class BaitEvent extends EventMessageEvent {
 	static regexes = [
-		/^Bait Event (begins in (1 hour|\d+ minutes?|\d+ seconds?)\.|has started!)$/i,
-		/^Fishing event ends!$/i,
+		/^Bait Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
+		/^Bait Event has started!$/i,
 		/^[123]\) [a-zA-Z0-9_]{2,16} -- \d+ fish$/i,
+		/^Fishing event ends!$/i,
 	];
+
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(BaitEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (BaitEvent.regexes[0].test(this.message)) {
@@ -175,15 +250,22 @@ export class BaitEvent extends BaseMessageEvent {
 			return `${this.message}`;
 		}
 	}
+
+	isEndMessage(): boolean {
+		return BaitEvent.regexes.at(-1)?.test(this.message) || false;
+	}
 }
 
-export class CastleEvent extends BaseMessageEvent {
+export class CastleEvent extends EventMessageEvent {
 	static regexes = [
-		/^Battle for Minewind (begins in (1 hour|\d+ minutes?|\d+ seconds?)\.)(\n.*)?$/i,
+		/^Battle for Minewind begins in (1 hour|\d+ minutes?|\d+ seconds?)\.(\n.*)?$/i,
 		/^Battle for Minewind (has started!?|has begun!?)\.?$/i,
 		/^[a-zA-Z0-9 ]{1,64} \([a-zA-Z0-9]{1,4}\) hold the Minewind City!$/i,
 		/^[a-zA-Z0-9 ]{1,64} \([a-zA-Z0-9]{1,4}\) take the Minewind City from [a-zA-Z0-9 ]{1,64} \([a-zA-Z0-9]{1,4}\)!(.*\n.*)*$/i,
 	];
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(CastleEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (CastleEvent.regexes[0].test(this.message)) {
@@ -192,39 +274,58 @@ export class CastleEvent extends BaseMessageEvent {
 			return `${this.message}`;
 		}
 	}
+
+	isEndMessage(): boolean {
+		return CastleEvent.regexes.at(-1)?.test(this.message) || CastleEvent.regexes.at(-2)?.test(this.message) || false;
+	}
 }
 
-export class TeamDeathMatchEvent extends BaseMessageEvent {
+export class TeamDeathMatchEvent extends EventMessageEvent {
 	static regexes = [
-		/^(Team)?( |-)?death( |-)?match (Event )?begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
-		/^(Team)?( |-)?death( |-)?match (event )?has (begun|started).*$/,
-		/^(Team)?( |-)?death( |-)?match (event )?(ends|has ended).*$/,
+		/^Team Deathmatch Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
 		/^Team (aqua|red) wins the Team Deathmatch event!$/,
 	];
+
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(TeamDeathMatchEvent.regexes, this.message)
+	}
+
 	generateDiscordMessage(): string {
 		if (
-			TeamDeathMatchEvent.regexes[0].test(this.message) ||
-			TeamDeathMatchEvent.regexes[1].test(this.message)
+			TeamDeathMatchEvent.regexes[0].test(this.message)
 		) {
 			return `${this.message} ${ping(EventChannel.teamdeathmatch.ping_group)} ${ping(EventChannel.general.ping_group)}`;
 		} else {
 			return `${this.message}`;
 		}
 	}
+
+	isEndMessage(): boolean {
+		return TeamDeathMatchEvent.regexes.at(-1)?.test(this.message) || false;
+	}
 }
 
-export class FreeForAllEvent extends BaseMessageEvent {
+export class FreeForAllEvent extends EventMessageEvent {
 	static regexes = [
 		/^Free-For-All Event begins in (1 hour|\d+ minutes?|\d+ seconds?)\.$/i,
-		/^Free-For-All event ends!$/i,
 		/^[123]\) [a-zA-Z0-9_]{2,16} -- \d+ kills$/,
+		/^Free-For-All event ends!$/i,
 	];
+
+	public shouldGenerateDiscordMessage(): boolean {
+		return this._shouldGenerateDiscordMessage(FreeForAllEvent.regexes, this.message)
+	}
+
 	generateDiscordMessage(): string {
 		if (FreeForAllEvent.regexes[0].test(this.message)) {
 			return `${this.message} ${ping(EventChannel.freeforall.ping_group)} ${ping(EventChannel.general.ping_group)}`;
 		} else {
 			return `${this.message}`;
 		}
+	}
+
+	isEndMessage(): boolean {
+		return FreeForAllEvent.regexes.at(-1)?.test(this.message) || false;
 	}
 }
 
