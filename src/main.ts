@@ -125,7 +125,12 @@ async function main() {
 			});
 			if (typeof response === "undefined") return false;
 
-			discordBot.send(response.content, EventChannel.commands.channel_id);
+			let shouldEscape = true; // deafult value
+			if (typeof response.shouldEscape !== "undefined") {
+				shouldEscape = response.shouldEscape;
+			}
+
+			discordBot.send(response.content, EventChannel.commands.channel_id, shouldEscape);
 		}
 		return false;
 	});
@@ -201,7 +206,7 @@ async function main() {
 	function sendCurrentEventMessage() {
 		setTimeout(() => {
 			minecraftBot.send(
-				Upcoming.generateUpcomingMessage(minecraftBot.getTabHeader(), mostRecentEvent.get()).content,
+				Upcoming.generateUpcomingMessage(minecraftBot.getTabHeader(), mostRecentEvent.get()),
 			)
 		}, 1000)
 	}
@@ -298,8 +303,13 @@ async function main() {
 					}
 					const event = new eventMap.init(message)
 					if (event.shouldGenerateDiscordMessage()) {
+						let generatedMessage = event.generateDiscordMessage();
+						const timestamp = Upcoming.timeStringToTimeStamp(generatedMessage);
+						if (event.isUpcomingMessage() && !(typeof timestamp === "undefined")) {
+							generatedMessage = `${generatedMessage} (at ${Upcoming.timeStringToTimeStamp(generatedMessage)})`
+						}
 						discordBot.queue(
-							event.generateDiscordMessage(),
+							generatedMessage,
 							eventMap.channel.channel_id,
 						);
 					}
@@ -456,6 +466,7 @@ async function main() {
 	const timeoutMSUser = 5 * 60 * 1000;
 
 	function advertise(advertisement: Advertisement) {
+		logger.debug("Sending an advertisement...")
 		const user_advertisement = advertisement.get();
 		if (user_advertisement !== undefined) {
 			logger.debug(`Sending advertise: ${user_advertisement}`);
@@ -465,15 +476,16 @@ async function main() {
 		} else {
 			const discord_link = "https://discord.gg/TbmCrPmEBH";
 			const advertisements = [
-				`> Minewind auto event ping w/ bi-directional chat sync (in beta). ${discord_link} Try it out for yourself, send a msg in #chat and see it appear in mw!`,
-				`> Minewind auto event ping w/ bi-directional chat sync (in beta). Join now ${discord_link}`,
-				`> Never miss another event again with auto event pings. Join now ${discord_link}`,
+				`> Minewind auto event ping w/ bi-directional chat sync. ${discord_link} Try it out for yourself, send a msg in #chat and see it appear in mw!`,
+				//`> Minewind auto event ping w/ bi-directional chat sync. Join now ${discord_link}`,
+				//`> Never miss another event again with auto event pings. Join now ${discord_link}`,
 				//`> Talk on minewind from the comfort of discord! Join now ${discord_link}`,
 				//`> Try my auto-price checking. Just do -pc (ess name) (level) e.g., -pc antimage 2`,
 				//`> Price checking supports keys. Try it now -pc jester key`,
 				//`> Price checking supports some inf blocks! Try it now -pc inf diamond block`,
 				`> Type -help to learn about what commands I support.`,
 				`> Essences now have explanations. Do -explain (ess name) to learn more!`,
+				`> Easily find the essence you're looking for. Do -search (query) to search inside of essence descriptions (very alpha)!`,
 			];
 			const randomIdx = Math.floor(Math.random() * advertisements.length);
 			const chosen_advertisement = advertisements[randomIdx];
@@ -483,7 +495,7 @@ async function main() {
 		}
 	}
 
-	setTimeout(() => advertise(advertisement), getRandomInt(minTimeoutMSSystem, maxTimeoutMSSystem));
+	setTimeout(() => advertise(advertisement), 10000);
 
 	logger.info("Bot is started");
 	manualSend(`Bot is started`, EventChannel.logging.channel_id);

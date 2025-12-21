@@ -23,6 +23,9 @@ export class PriceCheck implements Command {
 	process(command: CommandType): CommandResponse | undefined {
 		// Allow -pc dang <item name> to work
 		if (command.args[0] === "dang") command.args.shift()
+		if (command.args[0] === "gapple") {
+			return { content: "PC: Gapple costs 1 Diamond Block Voucher", sender: "Price Check" };
+		}
 
 		let selected_result = this.blockPriceChecker.process(command.args);
 

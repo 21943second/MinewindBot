@@ -3,7 +3,7 @@ Explosive Webbing,explosive web,webbing explosion,web explosion
 Vampire Strike,vamp strike
 Fertile Strike
 Groundbreak Crit
-Fairy Barrier
+Fairy Barrier,fb
 Web Eater
 Gravity Resistance,gravity res, grav resistance,grav res,grav
 Blood Walker,bw
@@ -35,7 +35,7 @@ Curse Of Fangs
 Force Field,ff
 Goatfather
 Lava Eater
-Spontanious combustion
+Spontaneous combustion
 Arrow Strike
 Fatal Strike,fs
 Ice Coffin Strike,ice coffin
@@ -53,14 +53,14 @@ Static Field
 Life Swap
 Summon Dimension Anomaly,dim anom,dimensional anomaly,summon dimensional anomaly
 Water Eater
-Ender Pearl Dispencer
+Ender Pearl Dispenser
 Mass Polymorph
 Aquatic Explosion
-Death Claw Critical,dclaw critical,dclaw crit,dclaw,death claw crit
+Death Claw Critical,dclaw critical,dclaw crit,dclaw,death claw crit,death claw,dc
 High Gravity Critical,high gravity crit,hgc,high grav crit
 Magma Critical,magma crit
 Water Shot
-Dark Seed Explosion
+Dark Seed Explosion,dark seed
 Volcanic Explosion
 Flower Healing,flower heal
 Backstab Resistance
@@ -90,7 +90,7 @@ Starve
 Reduce Heal,reduced heal
 Life Steal,ls,lifesteal
 Bloodlust
-Mounted Damage
+Mounted Damage,mounted dmg
 Lightning Strike,light strike
 Freezing Strike
 Recover Undead Strike
@@ -119,7 +119,7 @@ Crouching Web Shot
 Rabbit Shot
 Falken
 Heart Extractor
-Decapication,decap
+Decapitation,decap
 Unholy Strength
 Chain Shot
 Death Absorption
@@ -146,10 +146,10 @@ Increased Heal & Harm Potion,increased heal and harm potion,increased heal and h
 Fast Potion Recharge,fast pot recharge,fast potion,fast pot
 Increased Dagger Replenish,incr dagger replenish,inc dagger replenish
 Increased Throwing Damage,incr throwing dmg,increased throwing damage,incr throwing damage,inc throwing damage,inc throw damage,inc throwing dmg,inc throw damage,increased throw damage,increased throw dmg
-Increased Maximum Daggers,inc maximum daggers,incr maximum daggers
+Increased Maximum Daggers,inc maximum daggers,incr maximum daggers,inc max daggers
 Increased Summon Damage,inc summon damage,incr summon damage
 Maximum Bees,max bees,increased max bees
-Bee Aggression,bee aggro
+Bee Aggression,bee aggro,increased bee aggression,inc bee aggression,inc bee aggro
 Nature Free Cast
 Bite Back
 Spongebob
@@ -229,7 +229,7 @@ Skeleton Archer
 Curse Skull
 Zombie Horse
 Bat Blink
-Sneak Fortitication,sneak fortification,sneak fort,sneak fortif
+Sneak Fortification,sneak fort,sneak fortif
 Tornado
 Quickstep,qs
 Dragon Spawn

@@ -25,7 +25,7 @@ export class ItemPriceChecker {
 	}
 
 	process(argList: string[]): [string, number] | undefined {
-		const item_name = argList.join(" ").toLowerCase().trim();
+		const item_name = argList.join(" ").toLowerCase().trim().replace("key of midas", "midas key");
 		const item: Item | undefined = this.lookupItem(item_name);
 		if (typeof item !== "undefined") {
 			return [item.generatePriceString(), 0];

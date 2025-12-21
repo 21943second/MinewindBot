@@ -1,9 +1,9 @@
 import {
 	Client,
 	codeBlock,
-	Message,
-	OmitPartialGroupDMChannel,
-	TextChannel,
+	type Message,
+	type OmitPartialGroupDMChannel,
+	type TextChannel,
 } from "discord.js";
 import logger from "../Logger";
 import { manualSend, pingUser } from "../util";

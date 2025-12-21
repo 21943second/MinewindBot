@@ -1,4 +1,5 @@
 import { codeBlock, escapeCodeBlock, escapeMarkdown } from "discord.js";
+import { Upcoming } from "./commands/Upcoming";
 import { EventChannel } from "./discord/servers";
 import { breakLinks, ping } from "./util";
 
@@ -66,6 +67,10 @@ export abstract class EventMessageEvent extends BaseMessageEvent {
 		"5 minutes",
 	]
 	public abstract shouldGenerateDiscordMessage(): boolean
+	public abstract isUpcomingMessage(): boolean
+	protected _isUpcomingMessage(regexes: RegExp[], message: string): boolean {
+		return regexes[0].test(message)
+	}
 	protected _shouldGenerateDiscordMessage(regexes: RegExp[], message: string): boolean {
 		if (!regexes[0].test(message)) {
 			return true;
@@ -76,6 +81,18 @@ export abstract class EventMessageEvent extends BaseMessageEvent {
 		return false;
 	}
 	abstract isEndMessage(): boolean
+	protected _generatePingDiscordMessage(message: string, ping_groups: string[], shouldTimeStamp: boolean) {
+		const ping_section = ping_groups.map(group => ping(group)).join(" ");
+		if (shouldTimeStamp) {
+			const timestamp = Upcoming.timeStringToTimeStamp(message);
+			if (typeof timestamp !== "undefined") {
+				message += ` ${timestamp}`
+			}
+		}
+		message += ` ${ping_section}`
+		return message;
+	}
+
 }
 
 export class SnovasionEvent extends EventMessageEvent {
@@ -87,9 +104,12 @@ export class SnovasionEvent extends EventMessageEvent {
 	shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(SnovasionEvent.regexes, this.message);
 	}
+	isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(SnovasionEvent.regexes, this.message);
+	}
 	generateDiscordMessage(): string {
 		if (SnovasionEvent.regexes[0].test(this.message)) {
-			return `${this.message} ${ping(EventChannel.snovasion.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.snovasion.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message}`;
 		}
@@ -110,12 +130,15 @@ export class LabyrinthEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(LabyrinthEvent.regexes, this.message) && !LabyrinthEvent.regexes[1].test(this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(LabyrinthEvent.regexes, this.message);
+	}
 
 	generateDiscordMessage(): string {
 		if (
 			LabyrinthEvent.regexes[0].test(this.message)
 		) {
-			return `${this.message} ${ping(EventChannel.labyrinth.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.labyrinth.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message}`;
 		}
@@ -136,10 +159,13 @@ export class BeefEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(BeefEvent.regexes, this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(BeefEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (BeefEvent.regexes[0].test(this.message)) {
-			return `${this.message} ${ping(EventChannel.beef.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.beef.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message}`;
 		}
@@ -160,10 +186,13 @@ export class AbyssalEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(AbyssalEvent.regexes, this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(AbyssalEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (AbyssalEvent.regexes[0].test(this.message)) {
-			return `${this.message} ${ping(EventChannel.abyssal.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.abyssal.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message} - 1s, 2 abyssal keys, 1 fmb, 64 gaps, 64 gold coins`;
 		}
@@ -184,10 +213,13 @@ export class AttackOnGiantEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(AttackOnGiantEvent.regexes, this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(AttackOnGiantEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (AttackOnGiantEvent.regexes[0].test(this.message)) {
-			return `${this.message} ${ping(EventChannel.attackongiant.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.attackongiant.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message}`;
 		}
@@ -211,10 +243,13 @@ export class FoxEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(FoxEvent.regexes, this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(FoxEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (FoxEvent.regexes[0].test(this.message)) {
-			return `${this.message} ${ping(EventChannel.fox.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.fox.ping_group, EventChannel.general.ping_group], true);
 		} else if (FoxEvent.regexes[2].test(this.message)) {
 			return `${this.message} - 52 deggs, 1 forbidden cacao beans`;
 		} else if (FoxEvent.regexes[3].test(this.message)) {
@@ -242,10 +277,13 @@ export class BaitEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(BaitEvent.regexes, this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(BaitEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (BaitEvent.regexes[0].test(this.message)) {
-			return `${this.message} ${ping(EventChannel.bait.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.bait.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message}`;
 		}
@@ -266,10 +304,13 @@ export class CastleEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(CastleEvent.regexes, this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(CastleEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (CastleEvent.regexes[0].test(this.message)) {
-			return `${this.message} ${ping(EventChannel.castle.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.castle.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message}`;
 		}
@@ -289,12 +330,15 @@ export class TeamDeathMatchEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(TeamDeathMatchEvent.regexes, this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(TeamDeathMatchEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (
 			TeamDeathMatchEvent.regexes[0].test(this.message)
 		) {
-			return `${this.message} ${ping(EventChannel.teamdeathmatch.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.teamdeathmatch.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message}`;
 		}
@@ -315,10 +359,13 @@ export class FreeForAllEvent extends EventMessageEvent {
 	public shouldGenerateDiscordMessage(): boolean {
 		return this._shouldGenerateDiscordMessage(FreeForAllEvent.regexes, this.message)
 	}
+	public isUpcomingMessage(): boolean {
+		return this._isUpcomingMessage(FreeForAllEvent.regexes, this.message)
+	}
 
 	generateDiscordMessage(): string {
 		if (FreeForAllEvent.regexes[0].test(this.message)) {
-			return `${this.message} ${ping(EventChannel.freeforall.ping_group)} ${ping(EventChannel.general.ping_group)}`;
+			return this._generatePingDiscordMessage(this.message, [EventChannel.freeforall.ping_group, EventChannel.general.ping_group], true);
 		} else {
 			return `${this.message}`;
 		}
@@ -389,7 +436,7 @@ export class DeathEvent extends BaseMessageEvent {
 	static regexes = [
 		/^[a-zA-Z0-9_]{2,16} is on RAMPAGE!+$/,
 		/^[a-zA-Z0-9_]{2,16} died$/,
-		/^[a-zA-Z0-9_]{2,16} starved to death$/,
+		/^[a-zA-Z0-9_]{2,16} starved to death( while fighting .*)?$/,
 		/^[a-zA-Z0-9_]{2,16} drowned( while trying to escape .*)?$/,
 		/^[a-zA-Z0-9_]{2,16} blew up$/,
 		/^[a-zA-Z0-9_]{2,16} self-disintegrated$/,

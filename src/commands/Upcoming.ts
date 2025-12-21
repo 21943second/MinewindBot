@@ -2,7 +2,7 @@ import type { MinecraftBot } from "../bot/MinecraftBot";
 import type { MostRecentEvent } from "../MostRecentEvent";
 import { calculateTimeDelta, TimeDelta } from "../util";
 import type Command from "./Command";
-import type { CommandResponse, CommandType } from "./Command";
+import { type CommandResponse, type CommandType, Platform } from "./Command";
 
 export class Upcoming implements Command {
 	bot: MinecraftBot;
@@ -14,14 +14,20 @@ export class Upcoming implements Command {
 	isValid(command: CommandType): boolean {
 		return command.command === "upcoming" || command.command === "event";
 	}
-	process(_: CommandType): CommandResponse | undefined {
+	process(command: CommandType): CommandResponse | undefined {
 		const header = this.bot.getTabHeader();
 		const mostRecentString = this.mostRecentEvent.get();
+		const upcomingMessage = Upcoming.generateUpcomingMessage(header, mostRecentString);
 
-		return Upcoming.generateUpcomingMessage(header, mostRecentString);
+		if (command.platform === Platform.discord) {
+			const timestamp = Upcoming.timeStringToTimeStamp(upcomingMessage);
+			return { content: `${upcomingMessage} (at ${timestamp})`, shouldEscape: false };
+		}
+
+		return { content: upcomingMessage };
 	}
 
-	public static generateUpcomingMessage(header: string, mostRecentString: string | null) {
+	public static generateUpcomingMessage(header: string, mostRecentString: string | null): string {
 		// if (no header)
 		//     guess
 		// (header and castle in header and saturday)
@@ -33,7 +39,7 @@ export class Upcoming implements Command {
 
 		if (header === "") {
 			if (mostRecentString === null || mostRecentString === "") {
-				return { content: `Unable to determine upcoming event` };
+				return `Unable to determine upcoming event`;
 			} else {
 				let resetTime: string;
 
@@ -47,20 +53,16 @@ export class Upcoming implements Command {
 				const deltaString = this.generateTimeString(timeDelta);
 
 				if (isSaturday) {
-					return {
-						content: `Most Recent Event was ${mostRecentString}. Potential repeat during castle (${deltaString}).`,
-					};
+					return `Most Recent Event was ${mostRecentString}. Potential repeat during castle (${deltaString}).`;
 				} else {
-					return {
-						content: `Most Recent Event was ${mostRecentString}. Potential repeat after reset (${deltaString}).`,
-					};
+					return `Most Recent Event was ${mostRecentString}. Potential repeat after reset (${deltaString}).`;
 				}
 			}
 		} else {
 			const minutesRegex = /\d+/;
 			const match = header.match(minutesRegex);
 			if (match === null) {
-				return { content: header };
+				return header;
 			}
 			const totalMinutes = Number(match[0]);
 			const hours = Math.floor(totalMinutes / 60);
@@ -76,7 +78,7 @@ export class Upcoming implements Command {
 				);
 			}
 
-			return { content: formatted };
+			return formatted;
 		}
 	}
 
@@ -90,5 +92,42 @@ export class Upcoming implements Command {
 			out = `${delta.minutes} min`;
 		}
 		return out;
+	}
+
+	private static timeStringToUnix(time: string): number | undefined {
+		const hourRegex = /(\d+) (hour|hr)/;
+		const minuteRegex = /(\d+) (minute|min|mn)/;
+		const secondRegex = /(\d+) (second)/;
+		const now = Math.round(Date.now() / 1000);
+		let delta: number = 0;
+		if (hourRegex.test(time)) {
+			const hourMatch = time.match(hourRegex)?.at(1);
+			if (hourMatch) {
+				delta += 60 * 60 * parseInt(hourMatch, 10);
+			}
+		}
+		if (minuteRegex.test(time)) {
+			const minuteMatch = time.match(minuteRegex)?.at(1);
+			if (minuteMatch) {
+				delta += 60 * parseInt(minuteMatch, 10);
+			}
+		}
+		if (secondRegex.test(time)) {
+			const secondMatch = time.match(secondRegex)?.at(1);
+			if (secondMatch) {
+				delta += parseInt(secondMatch, 10);
+			}
+		}
+		if (delta === 0) {
+			return;
+		}
+		return now + delta
+	}
+
+	public static timeStringToTimeStamp(timestring: string): string | undefined {
+		const time = Upcoming.timeStringToUnix(timestring);
+		if (typeof time === "undefined") { return; }
+		const timestamp = `<t:${time}:t>`
+		return timestamp
 	}
 }

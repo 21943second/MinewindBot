@@ -12,8 +12,8 @@ Backstab,⚔,1-2,Increases melee damage when dealt from behind an opponent
 Ball Lightning,✨,,Shoots a ball of lightning that deals damage in a small AoE
 Bat Blink,✨,,"Teleports behind you, spawning bats that explode near players"
 Beast Soul,👕,1-3,Obtain an extra Beast soul
-Bee Aggression,⚔👕,1-4,TODO
-Berry Bush,✨⚔,,TODO
+Bee Aggression,⚔👕,1-4,Makes bees angrier and attack faster
+Berry Bush,✨⚔,,Summons berry bushes
 Bind,⚔,,Restricts players from teleporting on hit
 Bite Back,👕,,A chance to spawn a ring of evoker fangs around you upon taking damage
 Black Hole,✨,,"Clears a large sphere, pulling in all entities. Costs 1 degg."
@@ -105,7 +105,7 @@ Heal On Teleport,👕,1-3,Provides a heal upon teleport
 Healthy Strike,⚔,,Deals extra damage to opponents the more health the player has
 Heart Extractor,⚔,,Receive the named heart of players on kill
 Heightened Senses,👕,1-4,Reveals invisible players
-High Gravity Critical,⚔,,"On crit, restricts movement of players and mobs"
+High Gravity Critical,⚔,,"On crit, restricts jumping and general movement of players and mobs"
 Honey Cannon,✨,,Shoots a beam of honey that replaces blocks with honey on impact
 Ice Bomb,✨,,"When shot at ice, detonates after a short interval"
 Ice Coffin Strike,⚔,,"On crit, trap opponents in an ice box"
@@ -217,7 +217,7 @@ Slow,⚔,1-5,Inflicts the slowness effect on hits
 Sneak Fortification,👕,1-2,Provides absorption over time whilst sneaking
 Snowmage,✨,,"Summons a snowman that can fly, casting ice spells at opponents"
 Sonic Slash,⚔,,A long range melee attack with a short cooldown
-Soul Break,⚔,,Melee hits steal souls from opponents
+Soul Break,⚔,,Melee hits removes souls from opponents
 Soul Chain,✨,,Pulls players and mobs towards you on cast
 Spectre Shot,⚔,,Replaces projectiles with charged creepers
 Speed,👕,1-5,Provides the speed effect

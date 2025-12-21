@@ -39,4 +39,5 @@ export type CommandType = BaseCommandType & (DiscordMessage | MinecraftMessage);
 export type CommandResponse = {
 	content: string;
 	sender?: string;
+	shouldEscape?: boolean;
 };

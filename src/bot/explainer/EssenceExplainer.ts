@@ -5,6 +5,7 @@ import logger from "../../Logger";
 import { unspaceAndLowercase } from "../../util";
 
 export class EssenceExplainer {
+	originalEssenceMap!: Map<string, Essence>;
 	essenceMap!: Map<string, Essence>;
 	essenceMapMaginalized!: Map<string, Essence>;
 
@@ -22,13 +23,51 @@ export class EssenceExplainer {
 		const grid = Papa.parse<string[]>(file).data;
 		const alias_grid = Papa.parse<string[]>(alias_file).data;
 
-		const essences = extract_essences(grid);
+		this.originalEssenceMap = extract_essences(grid);
 		// Make things like hgc -> high grav crit
-		parseAndInsertAliases(alias_grid, essences);
-		this.essenceMap = generateFullMap(essences);
+		parseAndInsertAliases(alias_grid, this.originalEssenceMap);
+		this.essenceMap = generateFullMap(this.originalEssenceMap);
 		// Make auto thing work better xd
 		this.essenceMapMaginalized = marginalizeMap(this.essenceMap);
 	}
+	reverseLookupEssences(argList: string[]): Essence[] {
+		const args = argList.join("").toLowerCase();
+		logger.debug(`Searching for arg "${args}"... in map of size ${this.essenceMap.size}`)
+		let results: Essence[] = []
+		for (const essence of Object.values(this.originalEssenceMap)) {
+			logger.debug(`Comparing with ${essence.title}: ${essence.description}`)
+			if (essence.description.toLowerCase().replace(" ", "").includes(args)) {
+				results.push(essence);
+			}
+		}
+		return results;
+	}
+	reverseLookupFullDescriptions(argList: string[]): string {
+		if (argList.join("").length < 3) {
+			return "Search term must be at least 3 characters long"
+		}
+		let results = this.reverseLookupEssences(argList);
+		const countToTake = 10
+		const total = results.length;
+		let wasLimited = false
+		if (results.length > countToTake) {
+			results = results.slice(0, countToTake);
+			wasLimited = true;
+		}
+		let message = results.map(essence => `\`\`\`${essence.generateDescription()}\`\`\``).join("\n")
+		if (wasLimited) {
+			message += `\n\`\`\`(Limited to ${countToTake} results of ${total} total)\`\`\``
+		}
+		return message.slice(3, -3);
+	}
+	reverseLookupTitles(argList: string[]): string {
+		if (argList.join("").length < 3) {
+			return "Search term must be at least 3 characters long"
+		}
+		const results = this.reverseLookupEssences(argList);
+		return results.map(ess => ess.title).join(", ")
+	}
+
 	process(argList: string[]): [string, number] {
 		// Removes the number from a command so like
 		// hgc 3 just becomes hgc
@@ -101,6 +140,7 @@ class Essence {
 
 	static from_line(line: string[]): Essence | undefined {
 		const [title, type, levels, description] = line;
+		if (typeof title === "undefined") return undefined;
 		return new Essence(title, type, levels, description);
 	}
 
@@ -113,12 +153,12 @@ class Essence {
 		})
 		let out: string = this.title;
 		if (this.levels) {
-			out += ` ${this.levels}`
+			out += ` ${this.levels} `
 		}
 		if (this.type.length > 0) {
 			out += ` (${this.type.join(", ")})`
 		}
-		out += `: ${this.description}`
+		out += `: ${this.description} `
 
 		return out
 	}
@@ -128,7 +168,7 @@ class Essence {
 	}
 
 	toString() {
-		return `${this.title}@${this.type}:${this.levels}:${this.description}`;
+		return `${this.title} @${this.type}:${this.levels}:${this.description} `;
 	}
 }
 

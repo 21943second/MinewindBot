@@ -8,7 +8,7 @@ Tempest Key Essences,,,,,,,,,,,Contributions and opinions to validate prices com
 ,Groundbreak Crit,,BBB,,,,,,,,,,,,,
 ,Fairy Barrier,4,BBB,S,X close to Z,Z,,,,,,,,,,
 ,Web Eater,4,B,A,SS,SSS,,,,,"There are now 399 essences including tiers (32 Tempest, 35 Paradox, 30 Dimensional, Inferno 35, Chaos 267)",,,,,
-,Gravity Resistance,4,BB,A,X close to Z,Z,,,,,Average chaos key price: 2s,,,,,
+,Gravity Resistance,4,BB,A,X close to Z,Z,,,,,Average chaos key price: 1.5s,,,,,
 ,Blood Walker,4,BBB,AA,SS,X,,,,,bleep bloop christiebot price check machine sayz:,,,,,
 ,Ghost Block,,(no ess form),Price is based on Shield's soul type/count and if it has mending,,,,,,,Price Tiers,Quality Tiers,,,,
 ,Poseidon Block,,(no ess form),Price is based on Shield's soul type/count and if it has mending,,,,,,,Bidding wars,Z,,,,
@@ -58,7 +58,7 @@ Dimensional Key Essences,,,,,,,,,,,7s-9s,S,,,,
 ,Life Swap,,CC,,,,,Degg,,,,,,7,,7
 ,Summon Dimension Anomaly,,S,,,,,Dim 2,,,,,,31,,31
 ,Water Eater,,BB,,,,,Free,,,,,,5,,5
-,Ender Pearl Dispencer,,C,,,,,Dim 1,,,,,,1,10,1.15625
+,Ender Pearl Dispenser,,C,,,,,Dim 1,,,,,,1,10,1.15625
 ,Mass Polymorph,,CCC,,,,,Degg,,,,,,20,,20
 Inferno Key Essences,,,,,,,,,,,,,,7,,7
 ,Aquatic Explosion,,BB,,,,,,,,,,,0,,0
@@ -110,7 +110,7 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Instant Mining,,A,,,,,,,,,,,1,,1
 ,Increased Melee Damage,3,BB,S,X,,,,,,,,,33,,33
 ,Increased Lightning Damage,5,C,CC,B,S,SS,,,,,,,3,,3
-,Increased Magic Damage,3,B,AAA,Z,,,,,,,,,3,,3
+,Increased Magic Damage,3,B,AAA,X,,,,,,,,,3,,3
 ,Increased Arrow Damage,5,C,CCC,A,SSS,X close to Z,,,,Price Tiers,Quality Tiers,,4,,4
 ,Chaos Curse,,A,,,,,,,,Bidding wars,Z,,,10,0.15625
 ,Levitation Shot,,BB,,,,,,,,1-2 Sheggs,X,,,10,0.15625
@@ -126,12 +126,12 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Rabbit Shot,,CC,,,,,,,,1s Or Less,CCC,,,,-2
 ,Falken,,AAA,,,,,,,,32d Or Less,CC,,,,-2
 ,Heart Extractor,,C,,,,,,,,16d Or Less,C,,,,-2
-,Decapication,,CC,,,,,,,,Not Yet Traded,TBD,,,,-2
+,Decapitation,,CC,,,,,,,,Not Yet Traded,TBD,,,,-2
 ,Unholy Strength,,C,,,,,,,,,,,,,-2
 ,Chain Shot,,C,,,,,,,,,,,,,-2
 ,Death Absorption,,CC,,,,,,,,,,,,,-2
 ,Regeneration,3,AA,SS,X,,,,,,,,,,,-2
-,Jump,5,CC,BB,BBB,AA,X,,,,,,,,,-2
+,Jump,5,(no ess form),BB,BBB,AA,X,,,,,,,,,-2
 ,Speed,5,(no ess form),BB,S,X,Z,,,,,,,,,-2
 ,Strength,4,B,S,SSS,Z,,,,,,,,,,-2
 ,Damage Resistance,,SS,,,,,,,,,,,,,-2
@@ -163,12 +163,12 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Heal On Shield Block,,CC,,,,,,,,,,,,,-2
 ,Lava Walker,,CC,,,,,,,,,,,,,-2
 ,Ice Growth,,C,,,,,Ice 1,,,,,,,,-2
-,Blood Soup,,C,,,,,,,,,,,,,-2
+,Blood Soup,,C,,,,,Blood 1,,,,,,,,-2
 ,Baby Horde,,C,,,,,,,,,,,,,-2
 ,Rabbid Rabbits,,C,,,,,,,,,,,,,-2
-,Blood Heal,,C,,,,,,,,,,,,,-2
+,Blood Heal,,C,,,,,Blood 1,,,,,,,,-2
 ,Web Spinner,,C,,,,,,,,,,,,,-2
-,Polymorph,,C,,,,,,,,,,,,,-2
+,Polymorph,,C,,,,,Blood 1,,,,,,,,-2
 ,Centipede,,C,,,,,,,,,,,,,-2
 ,Bone Path,,C,,,,,,,,,,,,,-2
 ,Ignoble Steed,,C,,,,,,,,,,,,,-2
@@ -221,13 +221,13 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Flying Panda,,CC,,,,,,,,,,,2,,2
 ,Lava Bolt,,C,,,,,,,,,,,2,,2
 ,Dragon Leap,,BBB,,,,,,,,,,,1,,1
-,Grug Charge,,C,,,,,,,,,,,,,1045.0625
+,Grug Charge,,C,,,,,Orc 1,,,,,,,,1045.0625
 ,Blood Drain,,C,,,,,,,,,,,,,3.928806391
-,Blessed Snow,,C,,,,,,,,,,,,,
+,Blessed Snow,,C,,,,,Ice 1,,,,,,,,
 ,Dimension Steed,,C,,,,,,,,,,,,,
 ,Morbin Time,,C,,,,,,,,,,,,,
 ,Escape Skeleton,,C,,,,,,,,,,,,,
-,Giant Snowball,,C,,,,,,,,,,,,,
+,Giant Snowball,,C,,,,,Ice 1,,,,,,,,
 ,Exploding Chickens,,C,,,,,,,,,,,,,
 ,Puchita,,C,,,,,,,,,,,,,
 ,Ice Path,,C,,,,,Ice 1,,,,,,,,
@@ -236,7 +236,7 @@ Chaos Key Essences,,,,,,,,,,,,,,1,,1
 ,Curse Skull,,C,,,,,Undead 1,,,,,,,,
 ,Zombie Horse,,C,,,,,,,,,,,,,
 ,Bat Blink,,C,,,,,,,,,,,,,
-,Sneak Fortitication,2,CCC,A,,,,,,,,,,,,
+,Sneak Fortification,2,CCC,A,,,,,,,,,,,,
 ,Tornado,,C,,,,,,,,,,,,,
 ,Quickstep,,A,,,,,,,,,,,,,
 ,Dragon Spawn,,C,,,,,Dragon 1,,,,,,,,
