@@ -70,7 +70,7 @@ export class Advertise implements Command {
 		let message = match[2].trim();
 
 		//if (message.startsWith("/") || message.startsWith("-")) {
-		message = `AD: ${message}`;
+		message = `${message}`;
 		//}
 
 		this.advertisement.set(message, count);

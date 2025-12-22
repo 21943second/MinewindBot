@@ -85,3 +85,5 @@ export const Users = {
 		ping_group: "1406147592127123567",
 	},
 } as const;
+
+export const GuildID = "1404310820665688177" as const;

@@ -124,3 +124,34 @@ export type TimeDelta = {
 	hours: number;
 	minutes: number;
 };
+
+export function timeStringToUnix(time: string): number | null {
+	const hourRegex = /(\d+) (hour|hr)/;
+	const minuteRegex = /(\d+) (minute|min|mn)/;
+	const secondRegex = /(\d+) (second)/;
+	const now = Math.round(Date.now() / 1000);
+	let delta: number = 0;
+	if (hourRegex.test(time)) {
+		const hourMatch = time.match(hourRegex)?.at(1);
+		if (hourMatch) {
+			delta += 60 * 60 * parseInt(hourMatch, 10);
+		}
+	}
+	if (minuteRegex.test(time)) {
+		const minuteMatch = time.match(minuteRegex)?.at(1);
+		if (minuteMatch) {
+			delta += 60 * parseInt(minuteMatch, 10);
+		}
+	}
+	if (secondRegex.test(time)) {
+		const secondMatch = time.match(secondRegex)?.at(1);
+		if (secondMatch) {
+			delta += parseInt(secondMatch, 10);
+		}
+	}
+	logger.debug(`Converting time stamp from ${time} to a delta of ${delta}`)
+	if (delta === 0) {
+		return null;
+	}
+	return now + delta
+}

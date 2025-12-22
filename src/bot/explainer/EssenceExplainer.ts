@@ -47,6 +47,9 @@ export class EssenceExplainer {
 			return "Search term must be at least 3 characters long"
 		}
 		let results = this.reverseLookupEssences(argList);
+		if (results.length === 0) {
+			return "No essences match that search"
+		}
 		const countToTake = 10
 		const total = results.length;
 		let wasLimited = false
@@ -65,6 +68,9 @@ export class EssenceExplainer {
 			return "Search term must be at least 3 characters long"
 		}
 		const results = this.reverseLookupEssences(argList);
+		if (results.length === 0) {
+			return "No essences match that search"
+		}
 		return results.map(ess => ess.title).join(", ")
 	}
 

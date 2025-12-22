@@ -4,13 +4,16 @@ import { createClient } from "redis";
 import z from "zod";
 import { Advertisement } from "./Advertisement";
 import { MinecraftBot } from "./bot/MinecraftBot";
+import { Admin } from "./commands/Admin";
 import { Advertise } from "./commands/Advertise";
 import { Ban } from "./commands/Ban";
 import { ChatType, Platform } from "./commands/Command";
 import { CommandManagerBuilder } from "./commands/CommandManager";
 import { Discord } from "./commands/Discord";
 import { Explain } from "./commands/Explain";
+import { FAQ } from "./commands/FAQ";
 import { Help } from "./commands/Help";
+import { Music } from "./commands/Music";
 import { Players } from "./commands/Players";
 import { PriceCheck } from "./commands/PriceCheck";
 import { Upcoming } from "./commands/Upcoming";
@@ -21,7 +24,7 @@ import { Injest } from "./influx/injest";
 import logger from "./Logger";
 import { AbyssalEvent, AttackOnGiantEvent, BaitEvent, BeefEvent, CastleEvent, ChatEvent, DeathEvent, DebugEvent, FoxEvent, FreeForAllEvent, LabyrinthEvent, SharpeningEvent, SnovasionEvent, SystemEvent, TeamDeathMatchEvent, VoteEvent, WelcomeEvent } from "./MessageEvent";
 import { MostRecentEvent } from "./MostRecentEvent";
-import { breakLinks, getRandomInt, manualSend, pingUser } from "./util";
+import { breakLinks, getRandomInt, manualSend, pingUser, timeStringToUnix } from "./util";
 
 dotenv.config();
 
@@ -89,8 +92,13 @@ async function main() {
 		.build();
 	const commandManager = new CommandManagerBuilder()
 		.addCommand(new Help(), [Platform.discord, Platform.minecraft])
+		.addCommand(new Admin(minecraftBot, discordBot, mostRecentEvent), [Platform.minecraft])
+		.addCommand(new FAQ(), [Platform.minecraft])
 		.addCommand(new PriceCheck(), [Platform.discord, Platform.minecraft])
 		.addCommand(new Explain(), [Platform.discord, Platform.minecraft])
+		.addCommand(new Music(minecraftBot, discordBot), [
+			Platform.minecraft,
+		])
 		.addCommand(new Upcoming(minecraftBot, mostRecentEvent), [
 			Platform.discord,
 			Platform.minecraft,
@@ -205,9 +213,18 @@ async function main() {
 
 	function sendCurrentEventMessage() {
 		setTimeout(() => {
-			minecraftBot.send(
-				Upcoming.generateUpcomingMessage(minecraftBot.getTabHeader(), mostRecentEvent.get()),
-			)
+			const upcomingMessage = Upcoming.generateUpcomingMessage(minecraftBot.getTabHeader(), mostRecentEvent.get());
+			minecraftBot.send(upcomingMessage);
+
+			const { eventName, timeString } = Upcoming.generateUpcomingMessageSections(minecraftBot.getTabHeader(), mostRecentEvent.get());
+			if (timeString === null) return;
+			const time = timeStringToUnix(timeString);
+			if (time === null) return;
+			discordBot.createEvent({
+				name: eventName,
+				time: time,
+				duration_min: 15,
+			})
 		}, 1000)
 	}
 
@@ -303,13 +320,8 @@ async function main() {
 					}
 					const event = new eventMap.init(message)
 					if (event.shouldGenerateDiscordMessage()) {
-						let generatedMessage = event.generateDiscordMessage();
-						const timestamp = Upcoming.timeStringToTimeStamp(generatedMessage);
-						if (event.isUpcomingMessage() && !(typeof timestamp === "undefined")) {
-							generatedMessage = `${generatedMessage} (at ${Upcoming.timeStringToTimeStamp(generatedMessage)})`
-						}
 						discordBot.queue(
-							generatedMessage,
+							event.generateDiscordMessage(),
 							eventMap.channel.channel_id,
 						);
 					}
@@ -495,7 +507,7 @@ async function main() {
 		}
 	}
 
-	setTimeout(() => advertise(advertisement), 10000);
+	setTimeout(() => advertise(advertisement), timeoutMSUser);
 
 	logger.info("Bot is started");
 	manualSend(`Bot is started`, EventChannel.logging.channel_id);

@@ -1,8 +1,13 @@
 import type { MinecraftBot } from "../bot/MinecraftBot";
 import type { MostRecentEvent } from "../MostRecentEvent";
-import { calculateTimeDelta, TimeDelta } from "../util";
+import { calculateTimeDelta, TimeDelta, timeStringToUnix } from "../util";
 import type Command from "./Command";
 import { type CommandResponse, type CommandType, Platform } from "./Command";
+
+type UpcomingMessage = {
+	eventName: string,
+	timeString: string | null,
+}
 
 export class Upcoming implements Command {
 	bot: MinecraftBot;
@@ -20,14 +25,26 @@ export class Upcoming implements Command {
 		const upcomingMessage = Upcoming.generateUpcomingMessage(header, mostRecentString);
 
 		if (command.platform === Platform.discord) {
+			let message = upcomingMessage;
 			const timestamp = Upcoming.timeStringToTimeStamp(upcomingMessage);
-			return { content: `${upcomingMessage} (at ${timestamp})`, shouldEscape: false };
+			if (timestamp !== null) {
+				message += ` (at ${timestamp})`;
+			}
+			return { content: message, shouldEscape: false };
 		}
 
 		return { content: upcomingMessage };
 	}
 
 	public static generateUpcomingMessage(header: string, mostRecentString: string | null): string {
+		const { eventName, timeString } = Upcoming.generateUpcomingMessageSections(header, mostRecentString);
+		if (timeString === null) {
+			return `${eventName}`
+		}
+		return `${eventName} (${timeString})`
+	}
+
+	public static generateUpcomingMessageSections(header: string, mostRecentString: string | null): UpcomingMessage {
 		// if (no header)
 		//     guess
 		// (header and castle in header and saturday)
@@ -39,7 +56,10 @@ export class Upcoming implements Command {
 
 		if (header === "") {
 			if (mostRecentString === null || mostRecentString === "") {
-				return `Unable to determine upcoming event`;
+				return {
+					eventName: "unknown",
+					timeString: "",
+				}
 			} else {
 				let resetTime: string;
 
@@ -53,22 +73,31 @@ export class Upcoming implements Command {
 				const deltaString = this.generateTimeString(timeDelta);
 
 				if (isSaturday) {
-					return `Most Recent Event was ${mostRecentString}. Potential repeat during castle (${deltaString}).`;
+					return {
+						eventName: `Most Recent Event was ${mostRecentString}. Potential repeat during castle`,
+						timeString: deltaString
+					}
 				} else {
-					return `Most Recent Event was ${mostRecentString}. Potential repeat after reset (${deltaString}).`;
+					return {
+						eventName: `Most Recent Event was ${mostRecentString}. Potential repeat after reset`,
+						timeString: deltaString,
+					}
 				}
 			}
 		} else {
 			const minutesRegex = /\d+/;
 			const match = header.match(minutesRegex);
 			if (match === null) {
-				return header;
+				return {
+					eventName: header,
+					timeString: null
+				}
 			}
 			const totalMinutes = Number(match[0]);
 			const hours = Math.floor(totalMinutes / 60);
 			const minutes = totalMinutes - 60 * hours;
-			const out = this.generateTimeString({ hours: hours, minutes: minutes });
-			let formatted = header.replace(`${totalMinutes} min`, out);
+			const timestring = this.generateTimeString({ hours: hours, minutes: minutes });
+			let formatted = header.replace(` in ${totalMinutes} min`, "");
 
 			const bfw = "Battle for Minewind";
 			if (isSaturday && formatted.includes(bfw)) {
@@ -78,7 +107,10 @@ export class Upcoming implements Command {
 				);
 			}
 
-			return formatted;
+			return {
+				eventName: formatted,
+				timeString: timestring,
+			}
 		}
 	}
 
@@ -94,39 +126,9 @@ export class Upcoming implements Command {
 		return out;
 	}
 
-	private static timeStringToUnix(time: string): number | undefined {
-		const hourRegex = /(\d+) (hour|hr)/;
-		const minuteRegex = /(\d+) (minute|min|mn)/;
-		const secondRegex = /(\d+) (second)/;
-		const now = Math.round(Date.now() / 1000);
-		let delta: number = 0;
-		if (hourRegex.test(time)) {
-			const hourMatch = time.match(hourRegex)?.at(1);
-			if (hourMatch) {
-				delta += 60 * 60 * parseInt(hourMatch, 10);
-			}
-		}
-		if (minuteRegex.test(time)) {
-			const minuteMatch = time.match(minuteRegex)?.at(1);
-			if (minuteMatch) {
-				delta += 60 * parseInt(minuteMatch, 10);
-			}
-		}
-		if (secondRegex.test(time)) {
-			const secondMatch = time.match(secondRegex)?.at(1);
-			if (secondMatch) {
-				delta += parseInt(secondMatch, 10);
-			}
-		}
-		if (delta === 0) {
-			return;
-		}
-		return now + delta
-	}
-
-	public static timeStringToTimeStamp(timestring: string): string | undefined {
-		const time = Upcoming.timeStringToUnix(timestring);
-		if (typeof time === "undefined") { return; }
+	public static timeStringToTimeStamp(timestring: string): string | null {
+		const time = timeStringToUnix(timestring);
+		if (time === null) { return null; }
 		const timestamp = `<t:${time}:t>`
 		return timestamp
 	}

@@ -1,16 +1,19 @@
 import {
 	Client,
 	codeBlock,
+	GuildScheduledEventCreateOptions,
+	GuildScheduledEventEntityType,
+	GuildScheduledEventPrivacyLevel,
 	type Message,
 	type OmitPartialGroupDMChannel,
-	type TextChannel,
+	type TextChannel
 } from "discord.js";
 import logger from "../Logger";
 import { manualSend, pingUser } from "../util";
-import { EventChannel, Users } from "./servers";
+import { EventChannel, GuildID, Users } from "./servers";
 
 const { GatewayIntentBits } = require("discord.js");
-const { MessageContent, GuildMessages, GuildMembers, Guilds } =
+const { MessageContent, GuildMessages, GuildMembers, Guilds, GuildScheduledEvents } =
 	GatewayIntentBits;
 
 const dotenv = require("dotenv");
@@ -28,7 +31,7 @@ export class DiscordBot {
 
 	constructor() {
 		this.client = new Client({
-			intents: [MessageContent, GuildMessages, GuildMembers, Guilds],
+			intents: [MessageContent, GuildMessages, GuildMembers, Guilds, GuildScheduledEvents],
 		});
 
 		this.client.login(process.env.DISCORD_TOKEN);
@@ -72,8 +75,41 @@ export class DiscordBot {
 			? codeBlock(trimmedMessage)
 			: trimmedMessage;
 
-		channel.send(encodedMessage).catch((reason) => {
-			logger.warn(`Failed to send discord msg`, reason);
+		channel.send(encodedMessage)
+			.catch((reason) => {
+				logger.warn(`Failed to send discord msg`, reason);
+			})
+			.then(result => {
+				if (result) {
+					result.crosspost()
+						.catch((reason) => {
+							logger.warn(`Failed to crosspost msg`, reason);
+						})
+						.then(_result => {
+							logger.debug(`Successfully crossposted message`);
+						});
+				}
+			});
+	}
+
+	async createEvent({ name, time, duration_min }: { name: string, time: number, duration_min: number }) {
+		logger.debug(`Creating event "${name}" at time: ${time}`)
+		const guild = await this.client.guilds.fetch(GuildID);
+		const offset = duration_min * 60 * 1000; // 15 mins
+		const options: GuildScheduledEventCreateOptions = {
+			name: name,
+			scheduledStartTime: new Date(time * 1000),
+			scheduledEndTime: new Date(offset + (time * 1000)),
+			privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
+			entityType: GuildScheduledEventEntityType.External,
+			entityMetadata: {
+				location: "Minewind"
+			}
+		}
+		guild.scheduledEvents.create(options).catch(err => {
+			logger.warn(`Encountered error while creating event`, err)
+		}).then(res => {
+			logger.debug(`Successfully created an event`)
 		});
 	}
 

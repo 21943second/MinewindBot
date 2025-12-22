@@ -31,7 +31,9 @@ export class EssencePriceChecker {
 		let args = argList.join(" ").toLowerCase();
 
 		// Remove "essence of" from query
-		args = args.replace("essence of", "").replace("essence", "").replace("ess", "").trim();
+		args = args.replace("essence of", "").replace("essence", "").replace("ess", "")
+			.replace("dmg", "damage")
+			.trim();
 
 		const pcRegex = /^(.*?) ?(\d+| i| ii| iii| iv| v)?$/;
 

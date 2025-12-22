@@ -11,7 +11,7 @@ export class Help implements Command {
 		const pcMsg = "-pc (ess name) (tier). Pc works for essences, keys, and some inf blocks";
 		if (command.platform === Platform.minecraft) {
 			return {
-				content: `I currently support 5 commands: -help, -upcoming, -explain, -search, and ${pcMsg}`,
+				content: `I currently support 6 commands: -help, -upcoming, -explain, -search, -mw, and ${pcMsg}`,
 			};
 		} else if (command.platform === Platform.discord) {
 			return {

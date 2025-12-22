@@ -85,7 +85,7 @@ export abstract class EventMessageEvent extends BaseMessageEvent {
 		const ping_section = ping_groups.map(group => ping(group)).join(" ");
 		if (shouldTimeStamp) {
 			const timestamp = Upcoming.timeStringToTimeStamp(message);
-			if (typeof timestamp !== "undefined") {
+			if (timestamp !== null) {
 				message += ` ${timestamp}`
 			}
 		}
