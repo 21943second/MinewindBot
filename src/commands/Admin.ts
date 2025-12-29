@@ -1,13 +1,12 @@
-import { MostRecentEvent } from "src/MostRecentEvent";
 import type { MinecraftBot } from "../../src/bot/MinecraftBot";
 import type { DiscordBot } from "../../src/discord/DiscordBot";
 import logger from "../../src/Logger";
-import { timeStringToUnix } from "../../src/util";
+import type { MostRecentEvent } from "../../src/MostRecentEvent";
 import type Command from "./Command";
 import { type CommandResponse, type CommandType, Platform } from "./Command";
-import { Upcoming } from "./Upcoming";
 
 export class Admin implements Command {
+    static ADMINS = ["21943second"]
     minecraftBot: MinecraftBot;
     discordBot: DiscordBot;
     mostRecentEvent: MostRecentEvent;
@@ -18,36 +17,62 @@ export class Admin implements Command {
     }
     isValid(command: CommandType): boolean {
         return [
-            "create"
+            "drop",
+            "array"
         ].includes(command.command);
     }
     process(command: CommandType): CommandResponse | undefined {
         if (command.platform !== Platform.minecraft) { return; }
-        const admins = ["21943second"]
-        if (!admins.some(admin => {
-            return command.original.author === admin &&
-                this.minecraftBot.getPlayerList().includes(admin);
-        })) {
+        if (!Admin.isAdmin(command.original.author, this.minecraftBot)) {
             return;
         }
 
-        logger.debug(`Attempting to create an event...`)
+        switch (command.command) {
+            case "drop": {
+                const rawIndex = command.args.at(0)
+                if (typeof rawIndex === "undefined") return;
+                const index = parseInt(rawIndex, 10);
+                this.dropIndex(index);
+                break;
+            }
+            case "array": {
+                const [fromSlot, toStart, toEnd] = command.args.map(arg => parseInt(arg, 10));
+                this.arraySlot(fromSlot, toStart, toEnd);
+                break;
+            }
+            default: {
+                return;
+            }
+        }
+    }
 
-        const { eventName, timeString } = Upcoming.generateUpcomingMessageSections(this.minecraftBot.getTabHeader(), this.mostRecentEvent.get());
-        logger.debug(`Time stamp: ${timeString}`)
-        if (timeString === null) return;
-        const time = timeStringToUnix(timeString);
-        logger.debug(`Time: ${time}`)
-        if (time === null) return;
-        this.discordBot.createEvent({
-            name: eventName,
-            time: time,
-            duration_min: 15,
-        })
+    private static isAdmin(author: string, mcBot: MinecraftBot): boolean {
+        if (Admin.ADMINS.some(admin => {
+            return author === admin &&
+                mcBot.getPlayerList().includes(admin);
+        })) {
+            return true;
+        }
+        return false;
+    }
 
-        logger.debug(`Created an event`)
+    private async dropIndex(index: number) {
+        const inv = this.minecraftBot.bot.inventory;
+        const item = inv.slots.at(index);
+        if (item === null || typeof item === "undefined") {
+            return
+        }
+        this.minecraftBot.bot.tossStack(item);
+    }
 
-        return { content: `Created an event` }
+    private arraySlot(fromIndex: number, toStart: number, toEnd: number) {
+        const bot = this.minecraftBot.bot;
+        bot.simpleClick.leftMouse(fromIndex);
+        logger.debug(`Attempting to put the item from ${fromIndex} across ${toStart}:${toEnd}`)
+        for (let i = toStart; i < toEnd; i++) {
+            bot.simpleClick.rightMouse(i);
+        }
+        bot.simpleClick.leftMouse(toEnd);
     }
 }
 

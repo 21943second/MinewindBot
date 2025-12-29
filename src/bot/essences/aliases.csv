@@ -150,7 +150,7 @@ Increased Maximum Daggers,inc maximum daggers,incr maximum daggers,inc max dagge
 Increased Summon Damage,inc summon damage,incr summon damage,inc summon dmg
 Maximum Bees,max bees,increased max bees
 Bee Aggression,bee aggro,increased bee aggression,inc bee aggression,inc bee aggro
-Nature Free Cast
+Nature Free Cast,nfc
 Bite Back
 Spongebob
 Heal On Shield Block
@@ -194,7 +194,7 @@ Levitation,levi
 Ball Lightning
 Multiflame
 Bone Spirit
-Invisible Sneak
+Invisible Sneak,invis sneak
 Night Goggles
 Jump Rod
 Shoot Web
@@ -213,7 +213,7 @@ Shadow Form
 Nature Heal
 Flying Panda
 Lava Bolt
-Dragon Leap
+Dragon Leap,dleap
 Grug Charge
 Blood Drain
 Blessed Snow

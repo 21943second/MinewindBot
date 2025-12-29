@@ -78,12 +78,21 @@ export class EssenceExplainer {
 		// Removes the number from a command so like
 		// hgc 3 just becomes hgc
 		// since the explainer doesnt care about essence level 
+
+		logger.debug(`Original arg list`, argList)
+
 		const args = argList.filter(x => {
 			return !(/^\d+$/.test(x))
+		}).filter(x => {
+			return x.toLowerCase() !== "ess"
 		}).join(" ").toLowerCase();
 
+		logger.debug(`Filtered args: ${args}`)
+
 		// Remove "essence of" from query
-		const spellName = args.replace("essence of", "").replace("essence", "").replace("ess", "").trim();
+		const spellName = args.replace("essence of", "").replace("essence", "").trim();
+
+		logger.debug(`Replaced args: ${args}`)
 
 		// Lookup the essence in our table from above
 		const ess: Essence | undefined = this.lookupEssence(spellName);

@@ -28,10 +28,10 @@ export class Music implements Command {
     }
     process(command: CommandType): CommandResponse | undefined {
         if (command.platform !== Platform.minecraft) { return; }
-        const djs = ["21943second"]
+        const djs = ["21943second", "snowfoxmx", "pxstel"].map(name => name.toLowerCase())
         if (!djs.some(dj => {
-            return command.original.author === dj &&
-                this.minecraftBot.getPlayerList().includes(dj);
+            return command.original.author.toLowerCase() === dj &&
+                this.minecraftBot.getPlayerList().map(name => name.toLowerCase()).includes(dj);
         })) {
             return
         }
