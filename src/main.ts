@@ -252,43 +252,43 @@ async function main() {
 
 		const eventMapping = [{
 			title: "Snovasion",
-			channel: EventChannel.snovasion,
+			channel: EventChannel.events.snovasion,
 			init: SnovasionEvent,
 		}, {
 			title: "Beef",
-			channel: EventChannel.beef,
+			channel: EventChannel.events.beef,
 			init: BeefEvent,
 		}, {
 			title: "Labyrinth",
-			channel: EventChannel.labyrinth,
+			channel: EventChannel.events.labyrinth,
 			init: LabyrinthEvent,
 		}, {
 			title: "Abyssal",
-			channel: EventChannel.abyssal,
+			channel: EventChannel.events.abyssal,
 			init: AbyssalEvent
 		}, {
 			title: "Attack on Giant",
-			channel: EventChannel.attackongiant,
+			channel: EventChannel.events.attackongiant,
 			init: AttackOnGiantEvent
 		}, {
 			title: "Fox",
-			channel: EventChannel.fox,
+			channel: EventChannel.events.fox,
 			init: FoxEvent
 		}, {
 			title: "Bait",
-			channel: EventChannel.bait,
+			channel: EventChannel.events.bait,
 			init: BaitEvent
 		}, {
 			title: "Free-for-all",
-			channel: EventChannel.freeforall,
+			channel: EventChannel.events.freeforall,
 			init: FreeForAllEvent
 		}, {
 			title: "Team Deathmatch",
-			channel: EventChannel.teamdeathmatch,
+			channel: EventChannel.events.teamdeathmatch,
 			init: TeamDeathMatchEvent
 		}, {
 			title: undefined,
-			channel: EventChannel.castle,
+			channel: EventChannel.events.castle,
 			init: CastleEvent
 		}]
 
@@ -320,10 +320,22 @@ async function main() {
 					}
 					const event = new eventMap.init(message)
 					if (event.shouldGenerateDiscordMessage()) {
-						discordBot.queue(
-							event.generateDiscordMessage(),
-							eventMap.channel.channel_id,
-						);
+						eventMap
+						for (let i = 0; i < eventMap.channel.length; i++) {
+							const channel = eventMap.channel[i];
+							const general = EventChannel.general[i];
+							const ping_groups: string[] = [];
+							if ("ping_group" in channel) {
+								ping_groups.push(channel.ping_group)
+							}
+							if ("ping_group" in general) {
+								ping_groups.push(general.ping_group)
+							}
+							discordBot.queue(
+								event.generatePingableDiscordMessage(ping_groups),
+								channel.channel_id
+							);
+						}
 					}
 					if (event.isEndMessage()) {
 						sendCurrentEventMessage();
@@ -497,7 +509,7 @@ async function main() {
 				//`> Price checking supports some inf blocks! Try it now -pc inf diamond block`,
 				`> Type -help to learn about what commands I support.`,
 				`> Essences now have explanations. Do -explain (ess name) to learn more!`,
-				`> Easily find the essence you're looking for. Do -search (query) to search inside of essence descriptions (very alpha)!`,
+				`> Easily find the essence you're looking for. Do -search (query) to search inside of essence descriptions (alpha)!`,
 			];
 			const randomIdx = Math.floor(Math.random() * advertisements.length);
 			const chosen_advertisement = advertisements[randomIdx];

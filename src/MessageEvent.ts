@@ -1,6 +1,5 @@
 import { codeBlock, escapeCodeBlock, escapeMarkdown } from "discord.js";
 import { Upcoming } from "./commands/Upcoming";
-import { EventChannel } from "./discord/servers";
 import { breakLinks, ping } from "./util";
 
 export abstract class BaseMessageEvent {
@@ -92,7 +91,7 @@ export abstract class EventMessageEvent extends BaseMessageEvent {
 		message += ` ${ping_section}`
 		return message;
 	}
-
+	abstract generatePingableDiscordMessage(ping_groups: string[]): string
 }
 
 export class SnovasionEvent extends EventMessageEvent {
@@ -108,8 +107,11 @@ export class SnovasionEvent extends EventMessageEvent {
 		return this._isUpcomingMessage(SnovasionEvent.regexes, this.message);
 	}
 	generateDiscordMessage(): string {
+		return this.message;
+	}
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (SnovasionEvent.regexes[0].test(this.message)) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.snovasion.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message}`;
 		}
@@ -135,10 +137,14 @@ export class LabyrinthEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return this.message;
+	}
+
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (
 			LabyrinthEvent.regexes[0].test(this.message)
 		) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.labyrinth.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message}`;
 		}
@@ -164,8 +170,12 @@ export class BeefEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return `${this.message}`;
+	}
+
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (BeefEvent.regexes[0].test(this.message)) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.beef.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message}`;
 		}
@@ -191,8 +201,11 @@ export class AbyssalEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return `${this.message} - 1s, 2 abyssal keys, 1 fmb, 64 gaps, 64 gold coins`;
+	}
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (AbyssalEvent.regexes[0].test(this.message)) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.abyssal.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message} - 1s, 2 abyssal keys, 1 fmb, 64 gaps, 64 gold coins`;
 		}
@@ -218,8 +231,12 @@ export class AttackOnGiantEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return `${this.message}`;
+	}
+
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (AttackOnGiantEvent.regexes[0].test(this.message)) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.attackongiant.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message}`;
 		}
@@ -248,8 +265,12 @@ export class FoxEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return `${this.message}`;
+	}
+
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (FoxEvent.regexes[0].test(this.message)) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.fox.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else if (FoxEvent.regexes[2].test(this.message)) {
 			return `${this.message} - 52 deggs, 1 forbidden cacao beans`;
 		} else if (FoxEvent.regexes[3].test(this.message)) {
@@ -282,8 +303,11 @@ export class BaitEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return `${this.message}`;
+	}
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (BaitEvent.regexes[0].test(this.message)) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.bait.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message}`;
 		}
@@ -309,8 +333,12 @@ export class CastleEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return `${this.message}`;
+	}
+
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (CastleEvent.regexes[0].test(this.message)) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.castle.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message}`;
 		}
@@ -335,10 +363,13 @@ export class TeamDeathMatchEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return `${this.message}`;
+	}
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (
 			TeamDeathMatchEvent.regexes[0].test(this.message)
 		) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.teamdeathmatch.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message}`;
 		}
@@ -364,12 +395,17 @@ export class FreeForAllEvent extends EventMessageEvent {
 	}
 
 	generateDiscordMessage(): string {
+		return `${this.message}`;
+	}
+
+	generatePingableDiscordMessage(ping_groups: string[]): string {
 		if (FreeForAllEvent.regexes[0].test(this.message)) {
-			return this._generatePingDiscordMessage(this.message, [EventChannel.freeforall.ping_group, EventChannel.general.ping_group], true);
+			return this._generatePingDiscordMessage(this.message, ping_groups, true);
 		} else {
 			return `${this.message}`;
 		}
 	}
+
 
 	isEndMessage(): boolean {
 		return FreeForAllEvent.regexes.at(-1)?.test(this.message) || false;
