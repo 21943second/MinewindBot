@@ -16,6 +16,7 @@ import { Help } from "./commands/Help";
 import { Music } from "./commands/Music";
 import { Players } from "./commands/Players";
 import { PriceCheck } from "./commands/PriceCheck";
+import { Stream } from "./commands/Stream";
 import { Upcoming } from "./commands/Upcoming";
 import { Verifier } from "./commands/Verifier";
 import { DiscordBot } from "./discord/DiscordBot";
@@ -56,6 +57,7 @@ const DCToMWChatStreamSchema = z
 							message: z.string(),
 							proposed_nickname: z.string().optional(),
 							author: z.string().optional(),
+							shouldEscape: z.string().optional(),
 						}),
 					}),
 				)
@@ -94,6 +96,7 @@ async function main() {
 		.addCommand(new Help(), [Platform.discord, Platform.minecraft])
 		.addCommand(new Admin(minecraftBot, discordBot, mostRecentEvent), [Platform.minecraft])
 		.addCommand(new FAQ(), [Platform.minecraft])
+		.addCommand(new Stream(), [Platform.minecraft, Platform.discord])
 		.addCommand(new PriceCheck(), [Platform.discord, Platform.minecraft])
 		.addCommand(new Explain(), [Platform.discord, Platform.minecraft])
 		.addCommand(new Music(minecraftBot, discordBot), [
@@ -169,9 +172,15 @@ async function main() {
 
 		if (typeof response === "undefined") return false;
 
+		let shouldEscape = "true"; // deafult value
+		if (typeof response.shouldEscape !== "undefined") {
+			shouldEscape = response.shouldEscape ? "true" : "false";
+		}
+
 		const redisMessage = {
 			message: response.content,
 			messageType: "command",
+			shouldEscape: shouldEscape,
 		};
 
 		if (response.sender) {
@@ -320,9 +329,14 @@ async function main() {
 					}
 					const event = new eventMap.init(message)
 					if (event.shouldGenerateDiscordMessage()) {
-						eventMap
 						for (let i = 0; i < eventMap.channel.length; i++) {
+							logger.debug(`Attempting to send through channel ${eventMap.channel[i]}`, {
+								channel: eventMap.channel[i]
+							})
 							const channel = eventMap.channel[i];
+							if (!("channel_id" in channel) || channel.channel_id === "") {
+								continue;
+							}
 							const general = EventChannel.general[i];
 							const ping_groups: string[] = [];
 							if ("ping_group" in channel) {
@@ -331,6 +345,7 @@ async function main() {
 							if ("ping_group" in general) {
 								ping_groups.push(general.ping_group)
 							}
+							logger.debug(`Planning to send to ${channel.channel_id} the groups: ${ping_groups.join(', ')}`);
 							discordBot.queue(
 								event.generatePingableDiscordMessage(ping_groups),
 								channel.channel_id
@@ -401,7 +416,13 @@ async function main() {
 		const rawMessage = value.message.message;
 		let proposed_nickname = value.message.proposed_nickname;
 		const author = value.message.author;
-		let cleanedMessage = breakLinks(rawMessage).trim().replaceAll("/", "./");
+		const shouldLeaveUnescaped = value.message.shouldEscape === "false";
+		let cleanedMessage: string;
+		if (shouldLeaveUnescaped) {
+			cleanedMessage = rawMessage.trim();
+		} else {
+			cleanedMessage = breakLinks(rawMessage).trim().replaceAll("/", "./");
+		}
 		if (typeof proposed_nickname !== "undefined") {
 			proposed_nickname = proposed_nickname.slice(0, 16);
 			minecraftBot.runCommand("nick", proposed_nickname).then((failed) => {
@@ -510,6 +531,8 @@ async function main() {
 				`> Type -help to learn about what commands I support.`,
 				`> Essences now have explanations. Do -explain (ess name) to learn more!`,
 				`> Easily find the essence you're looking for. Do -search (query) to search inside of essence descriptions (alpha)!`,
+				`> Reminder to drink more water`,
+				`> Posture check! (fix your posture)`,
 			];
 			const randomIdx = Math.floor(Math.random() * advertisements.length);
 			const chosen_advertisement = advertisements[randomIdx];

@@ -140,7 +140,7 @@ Jump Rod,✨,,Propels the caster forward
 Jump,👕⚔,1-5,"Provides jump effect, increasing jump height"
 Knockback Immunity,👕,,Provides immunity to knockback
 Lava Bolt,✨,,Shoot a fire shot that explodes on impact and turns the surrounding area into lava
-Lava Eater,👕,,Clears the surrounding area of lava on cast
+Lava Eater,⚔,,Clears the surrounding area of lava on cast
 Lava Shot,⚔,1-2,"Upon shooting an arrow, the impact leaves a source of lava"
 Lava Shotgun,✨,,Shoots a spray of small fireballs with a large AoE
 Lava Walker,👕,,"Transforms lava under the player’s feet into obsidian, allowing for easy travel on lava"
@@ -155,7 +155,7 @@ Magic Disrupt,⚔,1-3,Blocks players and bosses from using most spells for a sho
 Magma Critical,⚔,,Hits create magma blocks under foes; critical hits trigger explosions
 Magma Orb,✨,,"Fires a slow homing shot that explodes on impact, creating a large magma mound"
 Mana Spirit,✨,,"Spawns an allay, providing a chance not to consume souls"
-Marker,⚔,,Enemies hit will glow for a period of time
+Marker,⚔,,"Enemies hit will glow (and received poison) for a period of time"
 Mass Levitation,✨,,All players and mobs within a small area will levitate for 8s on cast
 Mass Polymorph,✨,,Turns all in a large AoE into random mobs with blood ground beneath
 Maximum Bees,👕,1-4,Increases the amount of bees summoned by War Bees
@@ -245,7 +245,7 @@ Volcanic Explosion,⚔,,Leaves magma blocks around explosions
 War Bees,✨,,Summons a swarm of bees that inflict poison on hit
 Water Ball,✨,,Shoot a ball that leaves a mound of water where it lands
 Water Breathing,👕,,Provides infinite respiration
-Water Eater,👕,,Clears water surrounding the player
+Water Eater,⚔,,Clears water surrounding the player
 Water Shot,⚔,,"After shooting a projectile, leave a source of water on impact"
 Weakness Resistance,👕,1-4,"Provides resistance to weakness"
 Web Eater,👕,1-4,Consume cobweb blocks for healing

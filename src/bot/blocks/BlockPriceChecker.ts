@@ -27,7 +27,7 @@ export class BlockPriceChecker {
 
     process(argList: string[]): [string, number] | undefined {
         let item_name = argList.join(" ").toLowerCase().trim();
-        const prefixes = ["infinite block of", "infinite block", "infinite", "inf block", "inf"];
+        const prefixes = ["infinite block of ", "infinite block ", "infinite ", "inf block ", "inf "];
         let is_inf_block = false;
         let used_prefix = "";
         for (const prefix of prefixes) {

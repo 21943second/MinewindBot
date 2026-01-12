@@ -10,42 +10,55 @@ export const EventChannel = {
 		snovasion: [{
 			channel_id: "1406022546134138961",
 			ping_group: "1406150471273414717",
+		}, {
 		}],
 		labyrinth: [{
 			channel_id: "1406022622575067247",
 			ping_group: "1406150369083392051",
+		}, {
+			channel_id: "1451052228155670618",
 		}],
 		beef: [{
 			channel_id: "1406022646201716966",
 			ping_group: "1406150440424443925",
+		}, {
+			channel_id: "1451052228155670618",
 		}],
 		abyssal: [{
 			channel_id: "1406022668159029248",
 			ping_group: "1406150945397538817",
+		}, {
 		}],
 		attackongiant: [{
 			channel_id: "1406022697846050947",
 			ping_group: "1406151406293094440",
+		}, {
 		}],
 		fox: [{
 			channel_id: "1406022714182996169",
 			ping_group: "1406150876959346768",
+		}, {
 		}],
 		bait: [{
 			channel_id: "1406022732860227706",
 			ping_group: "1406151541357805628",
+		}, {
 		}],
 		castle: [{
 			channel_id: "1406022747477246032",
 			ping_group: "1406151066025988127",
+		}, {
 		}],
 		teamdeathmatch: [{
 			channel_id: "1406152143626305578",
 			ping_group: "1406150690048315432",
+		}, {
+			channel_id: "1451052228155670618",
 		}],
 		freeforall: [{
 			channel_id: "1406152370710380595",
 			ping_group: "1406150585610141807",
+		}, {
 		}],
 	},
 	sharpening: {
